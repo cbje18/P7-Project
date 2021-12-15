@@ -1,0 +1,104 @@
+\newpage
+\section{Empirical Results}
+This section aims to discuss the empirical results of modelling the log-returns of the daily closing price for the S\&P 500 stock market index under the GARCH framework using the \code{R} software package \code{rugarch}. The full-sample of our data starts from the $3$rd of January $2000$ to the 10th of December 2021 spanning a $21$ year period. This full-sample is split into an in-sample and out-of-sample period with the 30th of April 2021 being the splitting date. First, a short introduction to the \code{rugarch} package is provided. Then, the resulting in-sample parameter estimation and model diagnostics are presented. Lastly, the out-of-sample forecasting performance of a select few models is evaluated using the Diebold-Mariano test.
+
+\subsection{A Short Introduction to the \code{rugarch} Package in \code{R}*}\label{ss:intro-rugarch}
+The \code{rugarch} software package in \code{R} implements the previously discussed GARCH estimation and forecasting procedures. The implementation uses three functions as its main interface.
+
+The \code{ugarchfit} function is used to fit a GARCH model. The specification of the GARCH model to be fitted is defined via a call to the \code{ugarchspec} function. Then, forecasts from the fitted model are obtained using the \code{ugarchforecast} function via a call to the \code{ugarchfit} function. An example of their usage is shown underneath.
+\lstinputlisting{code/exampleone.R}
+Here \code{variance.model} is a list specifying the type of GARCH model and its order, \code{distribution.model} specifies the error distribution, \code{mean.model} is a list of the mean model specification, \code{solver} specifies the numerical optimization technique used to maximize \eqref{eq:garch-mle}, \code{out.sample} specifies the number of data points from the end to withhold for out-of-sample forecasting later, and \code{n.ahead} specifies the forecast horizon.
+
+Please note that, in this project report, the mean model is always specified, as in the example above, to be constantly equal to zero in compliance with the assumption made in Section \ref{sec:gf}. Moreover, the \code{hybrid} strategy solver ...
+
+%The \code{ugarchforecast} function implements forecasting given a fitted GARCH model via a call to the \code{ugarchfit} function. An example is shown underneath. %Note that \code{ugarchforecast} can also be used via a secondary dispatch method by calling \code{ugarchspec}. However, we do not make use of this secondary dispatch method, and therefore, the interested reader is referred to the references listed at the beginning of this chapter for more details.
+%\lstinputlisting{code/exampleone-continued.R}
+%Here \code{n.ahead} specifies the forecast horizon, that is, 
+
+
+\subsection{In-sample Model Selection and Diagnostics}
+Now, using the \code{rugarch} software package in \code{R}, each GARCH model discussed in the first chapter of this project report is fitted to the in-sample log-returns of the daily closing price for the S\&P 500 index. The results are shown in in Table \ref{tab:insample-res}. 
+
+Note that the order of a particular GARCH model, displayed in brackets below an information criterion value, is chosen such that it minimizes that particular information criterion. A notable finding is that ...
+
+Also, the results of the diagnostics tests applied to the residuals of each GARCH model is given in Appendix \ref{}. Some notable findings are...
+
+\newpage
+\begin{table}[H]
+\centering
+\begin{adjustbox}{angle=90}
+\begin{tabular}{llllllllllllllllllllllllll}
+\hline
+Model & \multicolumn{3}{c}{GARCH} & \multicolumn{3}{c}{EGARCH} & \multicolumn{3}{c}{TGARCH} & \multicolumn{3}{c}{AVGARCH} & \multicolumn{3}{c}{GJR-GARCH} & \multicolumn{3}{c}{APGARCH} \\ \hline
+Distribution       & norm & std & ged & norm & std & ged & norm & std & ged & norm & sted & ged & norm & sted & ged & norm & std & ged  \\
+AIC                &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+BIC                &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+HQIC               &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+SIC                &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+Log-Likelihood     &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+Ljung-Box Test     &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+LM test            &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Suck My P33 P33}
+\label{tab:insample-res}
+\end{table}
+
+
+%The implementation of the in-sample estimation is done such that one has to choose the maximal orders $p$ and $q$ of the GARCH models to be estimated. Furthermore, one has to choose between the specifications \code{sGARCH} (a standard GARCH model), \code{eGARCH}, \code{TGARCH}, \code{gjrGARCH}, \code{apARCH}, and \code{AVGARCH}, which have all been presented in Section 2.3. Finally, one also the conditional distribution of the model, which can be specified as a normal distribution, a Student's t-distribution, and a generalized error distribution as discussed in  Section 2.3.2. For instance, if one wants to fit models of maximal orders $p=q=2$ with specifications \code{sGARCH}, \code{eGARCH}, and \code{TGARCH}, and all 3 conditional distributions, then one has to fit a total of $8\cdot 3\cdot 3=72$ models. In fact, there are a total of $9$ combinations of the orders, but the pathology $p=q=0$ has been exclude from the estimation procedure.
+
+\newpage
+\subsection{Out-of-sample Forecast Evaluation}\label{ss:app-oos-forecast}
+This subsection first describes the recursive forecasting method used to conduct an out-of-sample forecasting performance comparison of the models discussed in the previous subsection. This out-of-sample forecasting performance is evaluated using the Diebold-Mariano test, described in Subsection \ref{ss:evf-dm}, which warrants a discussion of volatility proxies. At last, the results of this out-of-sample forecasting performance comparison are presented.
+
+\subsubsection{Recursive Forecasting Method}
+Once an appropriate GARCH model, fitted to the in-sample data, has been chosen by the minimization of some information criterion, it is possible to test the forecasting performance on the remaining data not used for estimation. Suppose our in-sample data is given by $(D_{t})_{t=1}^{T}$, where $T>1$ denotes the final time point in the sample. Furthermore, suppose that our forecasting horizon \code{n.ahead} is given by some $n\in \N$. Initially, we fit the model using our in-sample data, and use this fitted model to forecast the next $n$ time points. Then iteratively, the model is refit by augmenting our in-sample data with the point at $T+1$, and using this refitted model, we forecast ahead $n$ time points. If we have $m$ time points in our out-of-sample data, then naturally this procedure can only be done $m/n$ times.
+%This is done using a recursive forecasting method, which for each time point in our out-of-sample data uses the fitted model to forecast the next \code{n.ahead} values. Then the model is re-fitted by augmenting our in-sample data with the next data point in the time series. Using this newly fitted model, the forecasting procedure is repeated, and the next \code{n.ahead} values are forecasted. The forecasting is done using \code{rugarchforecast}, which can both forecast the $\sigma_{t}^{2}$ series and the actual series. An example of 
+%and then the forecasting procedure is repeated once again, and the next \code{n.ahead} values are forecasted. 
+
+\subsubsection{Volatility Proxies}
+For the subsequent discussion, let $R_{\leq T}=(R_{t})_{t=1}^{T}$, $T\in\Z$, denote a sample from a stochastic process of log-returns $R=(R_{t})_{t\in\Z}$, that is, $R_{t}=\log(P_{t}/P_{t-1})$, where $(P_{t})_{t\in\Z}$ is a stochastic process of daily prices for some financial asset. Assume that $R$ follows some GARCH process driven by $Z=(Z_{t})_{t\in\Z}$.
+
+Recall that a volatility proxy must be specified to conduct a Diebold-Mariano test, see \eqref{eq:forecasterror}. In what follows, different volatility proxies are presented. A simple volatility proxy is the squared log-returns $R_{t}^{2}$. The motivation for using $R_{t}^{2}$ as a volatility is given by (b) in Proposition \ref{prop:rvmfacts}. However, it is important to note that $R_{t}^{2}$ is a noisy volatility proxy since from \eqref{eq:rvmkurtosis} and (d) in Proposition \ref{prop:rvmfacts}, it follows that:
+\begin{equation*}
+    \mathrm{Var}(R_{t}^{2})=\mathbb{E}[\sigma_{t}^{4}]\left(\kappa(Z_{t})-1\right).
+\end{equation*}
+Interpreting the results of the Diebold-Mariano test conducted using a noisy volatility proxy is \textcolor{red}{evidently problematic}, whence a less noisy volatility proxy is introduced next. This volatility proxy is applicable provided that high-frequency intradata is available. Let $R_{t,i,m}$ denote the intraday log-returns over a time interval $1/m$ on day $t$, that is:
+\begin{equation*}
+    R_{t,i,m}\coloneqq\log\left(\frac{P_{t-i/m}}{P_{t-(i-1)/m}}\right),\quad i\in\{1,\dots,m\},\hspace{4pt}m\in\N.
+\end{equation*}
+Notice that:
+\begin{equation*}
+    R_{t}=\sum_{i=1}^{m}R_{t,i,m}.
+\end{equation*}
+In regards to intraday log-returns, it is often reasonable to make the following assumptions:
+\begin{equation*}
+    \mathbb{E}[R_{t,i,m}\mid R_{\leq t-1}]=0,\quad\mathrm{Cov}(R_{t,i,m},R_{t,j,m})=0,\hspace{6pt} i\neq j.
+\end{equation*}
+In particular, the latter assumption above implies that:
+\begin{equation*}
+    \sigma_{t}^{2}=\mathbb{E}[R_{t}^{2}\mid R_{\leq t-1}]%=\mathrm{Var}[\sum_{i=1}^{m}R_{t,i,m}\mid R_{\leq t-1}]=\sum_{i=1}^{m}\mathrm{Var}[R_{t,i,m}\mid R_{\leq t-1}]
+    =\sum_{i=1}^{m}\mathbb{E}[R_{t,i,m}^{2}\mid R_{\leq t-1}].
+\end{equation*}
+This motivates defining the so-called realized volatility (at frequency $m$) as:
+\begin{equation}
+    \mathrm{RV}_{t}^{(m)}\coloneqq\sum_{i=1}^{m}R_{t,i,m}^{2},
+\end{equation}
+The realized volatility is a less noisy volatility proxy compared to the squared log-returns when $m$ is chosen moderately large. This is argued in \ref{} with $m=288$. %hansen2005
+Moreover, under certain regularity conditions, the realized volatility is a consistent estimator of $\sigma_{t}^{2}$, that is:
+\begin{equation*}
+    \mathrm{RV}_{t}^{(m)}\overset{p}{\to}\sigma_{t}^{2}\quad\textrm{as}\quad m\to\infty.
+\end{equation*}
+For details the interested reader is referred to \ref{}. %andersen2003
+In this project report, the realized volatility at a frequency of $m=288$ for the S\&P 500 index is obtained via \ref{}. %https://realized.oxford-man.ox.ac.uk/
+
+Lastly, a volatility proxy is provided by the Chicago Board Options Exchange (CBOE) volatility index (VIX). The CBOE VIX is a model-free measure of the expected volatility implied by the S\&P 500 index over the next 30 calender days. The details of how the VIX index is calculated is beyond the scope of this project report, the interested reader is referred to \ref{} for details. The data for the CBOE VIX is obtained via \ref{}. %https://finance.yahoo.com/quote/%5EVIX/
+
+%Lastly, all the previously discussed volatility proxies are combined to form a new volatility proxy. This is done in the following manner: %\begin{equation}
+%    s
+%\end{equation}
+%Here ...
+
+\subsubsection{Results}
+
+

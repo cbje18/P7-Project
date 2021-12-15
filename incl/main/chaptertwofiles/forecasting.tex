@@ -1,0 +1,198 @@
+%\newpage
+\section{Forecasting Volatility}
+%GM, %HFTS5, %Tsay, %LNonGM-E, %FTS-PF, %UGM-EZ
+Introduction... %This subsection aims to illustrate how to forecast volatility using the previously discussed GARCH models.
+
+For this subsection, let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\N$, denote a sample from a stochastic process $X=(X_{t})_{t\in\Z}$. Assume that $X$ follows some GARCH model with known parameters. Note that in practice, the unobserved ``true'' parameters, which are used in the subsequent discussions, are replaced by the fitted values computed from the estimated GARCH model.
+
+Now, recall that all non-anticipative GARCH models belong to a more general class of volatility models, namely random variance models. Therefore, it holds that under any non-anticipative GARCH model, the best predictor of $X_{T+1}$ is, as a consequence of (a) in Proposition \ref{prop:rvmfacts}, given by: %given by the following as a consequence of (a) in Proposition \ref{prop:rvmfacts}:
+\begin{equation*}
+    %b_{T+1}(X_{\leq T})=
+    \mathbb{E}[X_{T+1}\mid X_{\leq T}]=0,
+\end{equation*}
+whence, the best predictor of $X_{T+h}$ for $h>0$ is:
+\begin{equation}\label{eq:bestforcast1}
+    %b_{T+h}(X_{\leq T})=
+    \mathbb{E}[X_{T+h}\mid X_{\leq T}]=\mathbb{E}[\mathbb{E}[X_{T+h}\mid X_{\leq T+h-1}]\mid X_{\leq T}]=0.
+\end{equation}
+Likewise, it follows from (b) in Proposition \ref{prop:rvmfacts} that:
+\begin{equation}\label{eq:bestforcast2}
+    \mathbb{E}[X_{T+h}^{2}\mid X_{\leq T}]=\mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}].
+\end{equation}
+The $h$-step ahead forecast for the volatility, $\sigma_{T+h}$, is defined as:
+\begin{equation}\label{eq:defn-volatilityforecast}
+    \mathbb{E}[\sigma_{T+h}\mid X_{\leq T}]\coloneqq\sqrt{\mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]}.
+\end{equation}
+Please beware of the fact \eqref{eq:defn-volatilityforecast} is merely a definition since from Jensen's inequality:
+\begin{equation*}
+    \sqrt{\mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]}\geq\mathbb{E}[\sigma_{T+h}\mid X_{\leq T}].
+\end{equation*}
+Nevertheless, note that \eqref{eq:bestforcast1} does not depend on the GARCH parameters, whereas \eqref{eq:bestforcast2} does. 
+Therefore, to illustrate how to forecast volatility as in \eqref{eq:defn-volatilityforecast}, different GARCH model specifications must be treated separately.
+
+%Therefore, to produce \textcolor{red}{confidence bands/prediction intervals} for the $h$-step ahead best predictor \eqref{eq:garch-forecast1}, the $h$-step ahead volatility forecast \eqref{eq:garch-forecast2} is needed.
+
+\subsection{Forecasts using Basic GARCH Models}
+Suppose that $X$ is a non-anticipative $\mathrm{GARCH}(p,q)$ process. Then it follows from \eqref{eq:defn-garch2}:
+\begin{equation}\label{eq:garch-forecast1}
+    \mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]=\omega+\sum_{i=1}^{q}\alpha_{i}\mathbb{E}[X_{T+h-i}^{2}\mid X_{\leq T}]+\sum_{j=1}^{p}\beta_{j}\mathbb{E}[\sigma_{T+h-j}^{2}\mid X_{\leq T}].
+\end{equation}
+This is evidently a recursive formula for computing \eqref{eq:bestforcast2} with the following boundary conditions:
+%This is a recursive formula for the $h$-step ahead forecast of $\sigma_{T+h}^{2}$ given all available information at time $T$ with the following boundary conditions: %Here \eqref{eq:garch-forecast1} is a recursive formula for \textcolor{red}{the $h$-step ahead forecast of $\sigma_{T+h}^{2}$ given all available information at time $T$} with the following boundary conditions:
+\begin{enumerate}[label=(\arabic*)]
+    \item If $i<h$, then $\mathbb{E}[X_{T+h-i}^{2}\mid X_{\leq T}]=\mathbb{E}[\sigma_{T+h-i}^{2}\mid X_{\leq T}]$.
+    \item If $i\geq h$, then $\mathbb{E}[X_{T+h-i}^{2}\mid X_{\leq T}]=X_{T+h-i}^{2}$.
+    \item If $j\geq h-1$, then $\mathbb{E}[\sigma_{T+h-j}^{2}\mid X_{\leq T}]=\sigma_{T+h-j}^{2}$.
+\end{enumerate}
+To study the asymptotic behaviour of \eqref{eq:garch-forecast1}, let us for the sake of notational simplicity and without loss of generality, restrict our attention to the case where $p=q=1$. Then:
+\begin{equation}\label{eq:garch-forecast2}
+\begin{split}
+    \mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]&=\omega+(\alpha_{1}+\beta_{1})\mathbb{E}[\sigma_{T+h-1}^{2}\mid X_{\leq T}]\\
+    &=\omega\sum_{i=0}^{h-1}(\alpha_{1}+\beta_{1})^{i}+(\alpha_{1}+\beta_{i})^{h-1}(\alpha_{1}X_{T}^{2}+\beta_{1}\sigma_{T}^{2}),
+\end{split}
+\end{equation}
+where the last step follows by recursive substitution. Consequently, if the $\mathrm{GARCH}(1,1)$ process is stationary, that is $\alpha_{1}+\beta_{1}<1$, then as $h\to\infty$:
+\begin{equation*}
+    \mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]\to\frac{\omega}{1-\alpha_{1}-\beta_{1}}.
+\end{equation*}
+This shows that as the forecasting horizon increases, the information conditioned upon has less and less impact on the forecast, asymptotically becoming irrelevant.
+
+\subsection{Forecasts using Asymmetric GARCH Models}
+Recall that several asymmetric GARCH models were introduced in Subsection \ref{ss:asymmetric} to incorporate the leverage effect. To best illustrate how the incorporation of the leverage effect affects forecasting volatility, suppose that $X$ is a non-anticipative GJR-GARCH$(p,q)$ process. Then it follows from \eqref{eq:defn-gjrgarch} that:
+\begin{equation*}
+    \mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]=\omega+\sum_{i=1}^{q}\alpha_{i}\mathbb{E}[X_{T+h-i}^{2}\mid X_{\leq T}]+\gamma_{i}\mathbb{E}[\mathbbm{1}_{\{X_{T+h-i}<0\}}X_{T+h-i}^{2}\mid X_{\leq T}]
+    +\sum_{j=1}^{p}\beta_{j}\mathbb{E}[\sigma_{T+h-j}^{2}\mid X_{\leq T}].
+\end{equation*}
+This is a recursive formula for computing \eqref{eq:bestforcast2} with the following boundary condition in addition to those presented above for \eqref{eq:garch-forecast1}:
+%with the same boundary conditions as in \eqref{eq:garch-forecast1}, as well as the following additional boundary condition:
+\begin{enumerate}
+    \item[(4)] Suppose that $Z$ follows a distribution that is symmetric around zero. Then if $i<h$:
+    \begin{equation*}
+        \mathbb{E}[\mathbbm{1}_{\{X_{T+h-i}<0\}}X_{T+h-i}^{2}\mid X_{\leq T}]\textcolor{red}{=\mathbb{P}(\{X_{T+h-i}<0\})\mathbb{E}[X_{T+h-i}^{2}\mid X_{\leq T}]}=\frac{1}{2}\mathbb{E}[\sigma_{T+h-i}^{2}\mid X_{\leq T}].
+    \end{equation*}
+\end{enumerate}
+Now, let us restrict our attention to the case where $p=q=1$. Then:
+\begin{align*}
+    \mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]&=\omega+\left(\alpha_{1}+\frac{\gamma_{1}}{2}+\beta_{1}\right)\mathbb{E}[\sigma_{T+h-1}^{2}\mid X_{\leq T}]\\
+    &=\omega\sum_{i=0}^{h-1}\left(\alpha_{1}+\frac{\gamma_{1}}{2}+\beta_{1}\right)^{i}+\left(\alpha_{1}+\frac{\gamma_{1}}{2}+\beta_{i}\right)^{h-1}(\alpha_{1}X_{T}^{2}+\gamma_{1}\mathbbm{1}_{\{X_{T}<0\}}X_{T}^{2}+\beta_{1}\sigma_{T}^{2}),
+    %&\textcolor{red}{=\omega+\left(\alpha_{1}+\frac{\gamma_{1}}{2}+\beta_{1}\right)^{h-1}()},
+\end{align*}
+where the last step follows by recursive substitution. This is reminiscent of \eqref{eq:garch-forecast2}. However, note that the incorporation of the leverage effect is seen to impact the volatility forecast regardless of whether $X_{T}$ is negative or not. Consequently, as $n\to\infty$:
+\begin{equation*}
+    \mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]\to\frac{\omega}{1-\alpha_{1}-\gamma_{1}/2-\beta_{1}}.
+\end{equation*}
+provided that the GJR-GARCH$(1,1)$ process is stationary, that is, $\alpha_{1}+\gamma_{1}/2+\beta_{1}<1$.
+
+For details about forecasting volatility using an EGARCH, a TGARCH, or an APGARCH process the interested reader is referred to \ref{}, \ref{}, and \ref{}, respectively. %2938260&zakoian1994&10.1.1.471.7587
+
+
+%\subsubsection{Forecasts using EGARCH Models}
+%Suppose that $X$ is a non-anticipative $\mathrm{EGARCH(p,q)}$ process. Then it follows from \eqref{eq:defn-egarch2}:
+%\begin{equation*}
+%    \mathbb{E}[\sigma_{T+h}^{2}\mid X_{\leq T}]=\exp(\omega)\mathbb{E}\left[\prod_{i=1}^{q}\exp\left(\alpha_{i}g(Z_{T+h-i})\right)\prod_{j=1}^{p}\left(\sigma_{T+h-j}^{2}\right)^{\beta_{j}}\,\bigg|\,X_{\leq T}\right].
+%\end{equation*}
+%\subsubsection{Forecasts using TGARCH Models}
+%\subsubsection{Forecasts using APGARCH Models}
+
+
+%\newpage
+%\subsection{Forecasts of Multiperiod Asset Returns**}
+%Let us consider the preceding forecasting theory in the case of $X$ being a stochastic process of daily log-returns $R$, that is, $R=(R_{t})_{t\in\Z}$ with $R_{t}=\log(P_{t}/P_{t-1})$, where $(P_{t})_{t\in\Z}$ is a stochastic process of daily prices for some financial asset.
+%%To be specific, let $(P_{t})_{t\in\Z}$ be a stochastic process of prices for a financial asset, and let $R=(R_{t})_{t\in\Z}$ be the corresponding stochastic process of log-returns, that is $R_{t}=\log(P_{t}/P_{t-1})$.
+%The $h$-day log-return from time $T$ to $T+h$ is defined as:
+%\begin{equation*}
+%    R_{T+h}(h)\coloneqq\sum_{j=1}^{h}R_{T+j},\quad h>0.
+%\end{equation*}
+%Therefore, under the assumption that $R$ is uncorrelated, it follows that:
+%\begin{equation}\label{eq:hday-forecast}
+%    \mathbb{E}[\left(R_{T+h}(h)\right)^{2}\mid R_{\leq T}]%=\sum_{j=1}^{h}\mathbb{E}[R_{T+j}^{2}\mid R_{\leq T}]=\sum_{j=1}^{h}\mathbb{E}[\sigma_{T+j}^{2}\mid R_{\leq T}]
+%    =\mathbb{E}[\sigma_{T+h}^{2}(h)\mid R_{\leq T}],
+%\end{equation}
+%%\begin{equation}
+%%    \mathrm{Var}[(R_{t+h}(h))^{2}\mid R_{\leq T}]=\mathbb{E}[\sigma_{T+h}^{2}(h)\mid R_{\leq T}],
+%%\end{equation}
+%where $\sigma_{T+h}^{2}(h)\coloneqq\sum_{j=1}^{h}\sigma_{T+j}^{2}$. This is the analog to \eqref{eq:bestforcast2} in case of $h$-day log-returns. Analogous to \eqref{eq:defn-volatilityforecast}, define the $h$-step ahead \textcolor{red}{conditional} volatility forecast of the $h$-day log-return as:
+%\begin{equation}\label{eq:defn-hday-volatilityforecast}
+%    \mathbb{E}[\sigma_{T+h}(h)\mid R_{\leq T}]\coloneqq\sqrt{\mathbb{E}[\sigma_{T+h}^{2}(h)\mid R_{\leq T}]}.
+%\end{equation}
+%%Here \eqref{eq:defn-hday-volatilityforecast} is a definition of the $h$-step ahead \textcolor{red}{conditional} volatility forecast of $h$-day log-returns. Notice that if $R$ has constant variance $\bar{\sigma}^{2}$, then ...
+%%... Suppose that $R$ is a $\mathrm{GARCH}(1,1)$ process. Then, plugging \eqref{} into \eqref{eq:hday-forecast} yields:
+%%\begin{equation*}
+%%    \mathbb{E}[\sigma_{T+h}^{2}(h)\mid R_{\leq T}]=
+%%\end{equation*}
+%%123123...
+
+
+\newpage
+\subsection{Evaluating Volatility Forecasts*}\label{ss:evf-dm}
+Introduction...
+
+For the subsequent discussion, let $\mathbb{E}_{\iota}[\sigma_{T+h}^{2}\mid X_{\leq T}]$ denote the $h$-step ahead forecast from GARCH model $\iota$ using a recursive method. More on this forecasting method later in Subsection \ref{ss:app-oos-forecast}. Then, the corresponding forecast error is defined as:
+\begin{equation}\label{eq:forecasterror}
+    e_{\iota,T+h\mid T}\coloneqq\mathbb{E}_{\iota}[\sigma_{T+h}^{2}\mid X_{\leq T}]-\sigma_{T+h}^{2},
+\end{equation}
+where $\sigma_{T+h}^{2}$ denotes a proxy for the true volatility. More on volatility proxies later in Subsection \ref{ss:app-oos-forecast}.
+%Recall that the true volatility $\sigma_{T+h}^{2}$ is a latent variable, whence a proxy of $\sigma_{T+h}^{2}$ is needed. A discussion of different proxies
+Some common forecast evaluation statistics based on $N$ out-of-sample forecasts are as follows:
+\begin{equation*}
+    \mathrm{MSE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}e_{\iota,j+h\mid j},\quad\mathrm{MAE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}\abs{e_{\iota,j+h\mid j}},\quad\mathrm{MAPE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}\frac{\abs{e_{\iota,j+h\mid j}}}{\sigma_{j+h}}.
+\end{equation*}
+\textcolor{red}{The model which produces the smallest values of the forecast evaluation statistics is judged to be the best model}. However, notice that these forecast evaluation statistics are random variables. So, in what follows, we introduce a statistical hypothesis testing procedure for determining if a model exhibits superior out-of-sample forecasting performance. This testing procedure, known as the so-called Diebold-Mariano (DM) test, is based on the following loss differential:
+\begin{equation*}
+    d_{T+h}\coloneqq g(e_{1,T+h}\mid T)-g(e_{2,T+h}\mid T),
+\end{equation*}
+where $g:\R\to\R$ is a loss function. Some common loss function choices are:
+\begin{equation*}
+    g(e_{\iota,T+h\mid T})=(e_{\iota,T+h\mid T})^{2},\quad g(e_{\iota,T+h\mid T})=\abs{e_{\iota,T+h\mid T}}.
+\end{equation*}
+The null hypothesis, being that the two GARCH models have equal out-of-sample forecasting performance, is then formally given by: 
+\begin{equation}\label{eq:dm-null}
+    \mathcal{H}_{0}:\mathbb{E}[d_{T+h}]=0.
+\end{equation}
+To test this null hypothesis of zero expected loss differential, the following DM test statistic based on $N$ out-of-sample forecasts is used:
+\begin{equation}\label{eq:dm-teststatistic}
+    \mathrm{DM}\coloneqq\frac{\bar{d}}{\left(\widehat{\mathrm{Var}}(\bar{d})/N\right)^{1/2}},
+\end{equation}
+%sample mean loss differential
+where $\bar{d}\coloneqq N^{-1}\sum_{j=T+1}^{T+N}d_{j+h}$, and $\widehat{\mathrm{Var}}(\bar{d})$ is some consistant estimate of the asymptotic variance of $\bar{d}$. A common choice for $\widehat{\mathrm{Var}}(\bar{d})$ is the Newey-West estimate.
+
+%*As per the next result, the DM test statistic is asymptotically standard normally distributed under the null hypothesis of zero expected loss differential.*
+\begin{prop}
+Assume that certain regularity conditions hold. Then under the the null hypothesis \eqref{eq:dm-null}:
+\begin{equation*}
+    \mathrm{DM}\overset{d}{\to}\mathrm{N}(0,1)\quad\mathrm{as}\quad N\to\infty.
+\end{equation*}
+\end{prop}
+The proof of this result is beyond the scope of this project report. The interested reader is referred to \ref{} and the references therein. %w18391
+Consequently, the null-hypothesis \eqref{eq:dm-null} is rejected at a given choice of significance level $a\in(0,1)$, traditionally $a=0.05$, if the observed DM test statistic is in the following critical region:
+\begin{equation*}
+    \mathcal{K}\coloneqq\left\{\left(-\infty,\Phi^{-1}(a/2)\right)\cup\left(\Phi^{-1}(1-a/2),\infty\right)\right\},
+\end{equation*}
+where $\Phi^{-1}:(0,1)\to\R$ denotes the quantile function of a standard normal distribution. Notice that the critical region above constitutes a two-sided test.
+
+%Let us now discuss choosing a volatility proxy in the forecast error \eqref{eq:forecasterror}. 
+
+
+
+
+
+
+
+
+
+
+
+
+%A common choice is as follows:
+%\begin{equation}
+%    \sigma_{T+h}^{2}=X_{T+h}^{2}.
+%\end{equation}
+%However, ...:
+%\begin{prop}
+%inf model chosen with prob 1
+%\end{prop}
+%The proof of this result is beyond the scope of this project report. The interested reader is referred to \ref{}. %
+%Some alternative and better suited volatility proxies are:
+%\begin{equation*}
+%    s
+%\end{equation*}

@@ -1,0 +1,103 @@
+\section{General Framework}\label{sec:gf}
+For the remainder of this project report, an arbitrary probability space $(\Omega,\mathcal{F},\mathbb{P})$ is fixed such that any stochastic process $Y=(Y_{t})_{t\in\Z}$ is defined on this probability space with target space $(\R,\mathcal{B}(\R))$. The term time series is often used synonymously for a stochastic process of the aforementioned form. 
+
+A stochastic process $Y$ is in econometric modelling often assumed to be decomposed in the following manner:
+\begin{equation}
+    Y_{t}=\mu_{t}+X_{t},\quad t\in\Z,
+\end{equation}
+where $\mu=(\mu_{t})_{t\in\Z}$ is a mean process, and $X=(X_{t})_{t\in\Z}$ is an error process. In what follows, the focus will be on modelling $X$ using volatility models, and therefore, it is henceforth for simplicity assumed that $\mu_{t}=0$ for all $t\in\Z$.
+
+\subsection{Stylized Facts of Financial Time Series}\label{fedpik}
+%GM, %175795, %Cont2001, %MalmstenTerasvirta04, %SSRN-id804070
+The volatility models to be discussed in this project report seek to reproduce several statistical regularities that are observed in copious financial time series. In what follows, some of the most well-established statistical regularities are introduced. These regularities are commonly referred to as so-called stylized facts of financial time series, and they are persistent across several financial markets, asset types, and time periods.
+
+For the subsequent discussion, suppose that $(P_{t})_{t\in\Z}$ is a stochastic process of prices for a financial asset, and let $R=(R_{t})_{t\in\Z}$ be the corresponding stochastic process of log-returns, that is $R_{t}=\log(P_{t}/P_{t-1})$. Then:
+\begin{enumerate}[label=(\roman*)]
+    \item There is no significant autocorrelation to be found in $R$. This stylized fact is not surprising in light of the so-called weak form of the efficient-market hypothesis (EMH). In particular, this hypothesis implies that if $R$ is significantly autocorrelated, then this autocorrelation could be exploited to make profitable investment decisions until the prices of the financial asset equilibrate such that the autocorrelation in $R$ disappears.
+    
+    \item Despite a lack of structural dependence in $R$, there is significant autocorrelation to be found in the stochastic process of absolute log-returns $(\abs{R_{t}})_{t\in\Z}$ or squared log-returns $(R_{t}^{2})_{t\in\Z}$. In fact, their autocorrelation is generally positive and slowly decaying. This stylized fact is usually reflected in the plots of their sample paths. Here large changes tend to be followed by large changes of either sign and vice versa, whence this stylized fact is often referred to as so-called volatility clustering. Note that this fact implies that $R$ is not a process with independent increments since the magnitude of future log-returns, irrespective of the sign, can more or less be predicted by past log-returns.%\textcolor{red}{**}
+
+    \item The empirical distribution of $R$ is generally leptokurtic, that is, it has fatter tails and a narrower central part compared to the normal distribution. Formally, the distribution of a random variable $X$ is said to be fat-tailed if for all $\lambda >0$:
+    \begin{equation}
+        \lim_{x\to \infty}e^{\lambda x}\mathbb{P}\left(X>x\right)=0.
+    \end{equation}
+    In other words, the distribution of $X$ is fat-tailed if the probability of extreme events decay slower than exponentially. Thus, more probability mass is condensed in the tails, and therefore extreme events are more likely than under a normal distribution. 
+    
+    \item There is often a positive correlation between $R_{t}^{+}\coloneqq\max\{R_{t},0\}$ and $\abs{R_{t+h}}$ for $h>0$, but the correlation between $R_{t}^{-}\coloneqq\max\{-R_{t},0\}$ and $\abs{R_{t+h}}$ is usually greater. This implies that negative returns increase future volatility disproportionately to positive returns, whence this stylized fact is referred to as the so-called leverage effect.
+\end{enumerate}
+For a more detailed discussion on stylized facts of financial time series, the reader is referred to the references listed at the beginning of this subsection and the references therein.
+
+\subsection{Random Variance Models}
+All volatility models encountered in this project report belong to a general class of models introduced below.
+\begin{defn}[\textit{Random Variance Model}]\label{defn:rvm}
+Let $X=(X_{t})_{t\in\Z}$ be a stochastic process on the probability space $(\Omega,\mathcal{F},\mathbb{P})$, and let $(\mathcal{F}_{t})_{t\in\Z}$ be a filtration on $(\Omega,\mathcal{F})$. Then $X$ is said to follow a random variance model iff:
+\begin{equation}
+    X_{t}=\sigma_{t}Z_{t},\quad t\in\Z,
+\end{equation}
+where $(\sigma_{t})_{t\in\Z}$ satisfies that $\sigma_{t}>0$ is $\mathcal{F}_{t-1}$-measurable, and $(Z_{t})_{t\in\Z}\sim\mathrm{IID}(0,1)$ such that $Z_{t}$ is independent of $\mathcal{F}_{t-1}$. %\textcolor{red}{and the $\sigma$-algebra induced by $(X_{s}\mid s<t)$}. 
+Moreover, if $X_{t}$ is a measurable function of $Z_{s}$, $s\leq t$, then $X$ is said to be non-anticipative.
+\end{defn}
+\begin{prop}[\textit{Properties of Random Variance Models}]\label{prop:rvmfacts}
+Let $(X_{t})_{t\in\Z}$ be a random variance model with $\mathbb{E}[X_{t}^{2}]<\infty$ for all $t\in\Z$. Then:
+\begin{multicols}{3}
+  \begin{enumerate}
+    \item[(a)] $\mathbb{E}[X_{t}\mid\mathcal{F}_{t-1}]=0$,
+    \item[(d)] $\mathbb{E}[X_{t}^{2}]=\mathbb{E}[\sigma_{t}^{2}]$,
+    \item[(b)] $\mathbb{E}[X_{t}^{2}\mid\mathcal{F}_{t-1}]=\sigma_{t}^{2}$,
+    \item[(e)] $\mathbb{E}[X_{t}^{4}]=\mathbb{E}[Z_{t}^{4}]\mathbb{E}[\sigma_{t}^4]$.
+    \item[(c)] $\mathbb{E}[X_{t}]=0$,
+    \item[\vspace{\fill}]
+ \end{enumerate}
+\end{multicols}
+\noindent Moreover, if $X_{s}$ is $\mathcal{F}_{t-1}$-measurable for $s<t$, then:
+\begin{equation}\label{eq:rvmprop1}
+    \mathrm{Cov}(X_{s},X_{t})=0.
+\end{equation}
+\end{prop}
+%Notice that 
+\begin{proof}
+To prove (a), use the product rule and independence rule of conditional expectation:
+%To prove (a), use \eqref{eq:cepop} and \eqref{eq:ceind}:
+\begin{equation}\label{eq:rvmproofprop1}
+    \mathbb{E}[X_{t}\mid\mathcal{F}_{t-1}]=\mathbb{E}[\sigma_{t}Z_{t}\mid\mathcal{F}_{t-1}]=\sigma_{t}\mathbb{E}[Z_{t}]=0.
+\end{equation}
+Analogously, we prove (b):
+\begin{equation}\label{eq:rvmproofprop2}
+    \mathbb{E}[X_{t}^{2}\mid\mathcal{F}_{t-1}]=\mathbb{E}[\sigma_{t}^{2}Z_{t}^{2}\mid\mathcal{F}_{t-1}]=\sigma_{t}^{2}\mathbb{E}[Z_{t}^{2}]=\sigma_{t}^{2}.
+\end{equation}
+%Note that the use of \eqref{eq:cepop} and \eqref{eq:ceind} above is justified by Proposition \ref{prop:fdr1} and Proposition \ref{prop:fdr2}, respectively.
+To prove (c), use the tower property of conditional expectation and \eqref{eq:rvmproofprop1}:
+%To prove (c), use \eqref{eq:cetp} and \eqref{eq:rvmproofprop1}:
+\begin{equation*}
+    \mathbb{E}[X_{t}]=\mathbb{E}[\mathbb{E}[X_{t}\mid\mathcal{F}_{t-1}]]=0.
+\end{equation*}
+To prove (d), use the tower property of conditional expectation and \eqref{eq:rvmproofprop2}:
+%To prove (d), use \eqref{eq:cetp} and \eqref{eq:rvmproofprop2}:
+\begin{equation*}
+    \mathbb{E}[X_{t}^{2}]=\mathbb{E}[\mathbb{E}[X_{t}^{2}\mid\mathcal{F}_{t-1}]]=\mathbb{E}[\sigma_{t}^{2}].
+\end{equation*}
+To prove (e), use the tower property, product rule, and indepedence rule of conditional expectation:
+%To prove (e), use \eqref{eq:cetp}, \eqref{eq:cepop}, and \eqref{eq:ceind}:
+\begin{equation*}
+    \mathbb{E}[X_{t}^{4}]=\mathbb{E}[\sigma_{t}^{4}\mathbb{E}[Z_{t}^{4}\mid\mathcal{F}_{t-1}]]=\mathbb{E}[Z_{t}^{4}]\mathbb{E}[\sigma_{t}^{4}].
+\end{equation*}
+To prove \eqref{eq:rvmprop1}, use the tower property, product rule, and \eqref{eq:rvmproofprop1}:
+%To prove \eqref{eq:rvmprop1}, use \eqref{eq:cetp}, \eqref{eq:cepop}, and \eqref{eq:rvmproofprop1}:
+\begin{equation*}
+    \mathrm{Cov}(X_{s},X_{t})=\mathbb{E}[X_{s}X_{t}]=\mathbb{E}[X_{s}\mathbb{E}[X_{t}\mid\mathcal{F}_{t-1}]]=0.\qedhere
+\end{equation*}
+\end{proof}
+%To gain an understanding of leptokurticity in the context of random variance models, the subsequent result is useful.
+\begin{prop}\label{prop:rvmkurt}
+Let $(X_{t})_{t\in\Z}$ be a random variance model with $\mathbb{E}[X_{t}^{4}]<\infty$ for all $t\in\Z$. Then the kurtosis of $X_{t}$ is given by:
+\begin{equation}\label{eq:rvmkurtosis}
+    \kappa(X_{t})=\kappa(Z_{t})\left(1+\frac{\mathrm{Var}[\sigma_{t}^{2}]}{\left(\mathbb{E}[\sigma_{t}^{2}]\right)^{2}}\right),\quad t\in\Z.
+\end{equation}
+\end{prop}
+\begin{proof}
+Note that from (e) in Proposition \ref{prop:rvmfacts}, it follows that:
+\begin{equation*}
+    \frac{\mathbb{E}[X_{t}^{4}]}{\left(\mathbb{E}[X_{t}^{2}]\right)^{2}}=\frac{\mathbb{E}[Z_{t}^{4}]\mathbb{E}[\sigma_{t}^{4}]}{\left(\mathbb{E}[Z_{t}^{2}]\mathbb{E}[\sigma_{t}^{2}]\right)^{2}}=\frac{\mathbb{E}[Z_{t}^{4}]}{\left(\mathbb{E}[Z_{t}^{2}]\right)^{2}}\left(1+\frac{\mathbb{E}[\sigma_{t}^{4}]}{\left(\mathbb{E}[\sigma_{t}^{2}]\right)^{2}}-1\right)=\frac{\mathbb{E}[Z_{t}^{4}]}{\left(\mathbb{E}[Z_{t}^{2}]\right)^{2}}\left(1+\frac{\mathrm{Var}[\sigma_{t}^{2}]}{\left(\mathbb{E}[\sigma_{t}^{2}]\right)^{2}}\right),
+\end{equation*}
+which proves the desired result.
+\end{proof}

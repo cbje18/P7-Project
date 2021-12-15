@@ -78,17 +78,25 @@
 \lstdefinestyle{custompy}{
   belowcaptionskip=\baselineskip,
   breaklines=true,
-  language=Python,
+  language=R,
+  %numbers=left,
   showstringspaces=false,
   basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{AAUblue1},
-  commentstyle=\itshape\color{AAUgrey3},
-  identifierstyle=\color{AAUblue2},
-  stringstyle=\color{AAUteal},
+  keywordstyle=\color{black},
+  %backgroundcolor=\color{gray!10},
+  commentstyle=\color{black},
+  %identifierstyle=\color{AAUblue2},
+  stringstyle=\color{black},
+  otherkeywords={},
+  morekeywords={},
+  deletekeywords={data,frame,length,as,character,par,min,model,function,df,split, list, library, grid, residuals, sqrt, int, qqnorm, qqline, close, nrow, replace, which, quantile, seq, by, for, filled, if, fitted, qnorm, start, end, ts, args, weights, coef, c, na, rm, all, D, order, numeric, mean}
 }
-\lstset{language=Python,style=custompy,captionpos=b}
+\lstset{language=R,style=custompy,captionpos=b}
 \renewcommand{\lstlistingname}{Listing}
 \renewcommand{\lstlistlistingname}{List of Listings}
+
+
+
 
 % Autoref settings -------------------------------------------------------------
 % https://en.wikibooks.org/wiki/LaTeX/Labels_and_Cross-referencing#autoref

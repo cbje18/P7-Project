@@ -1,0 +1,65 @@
+\newpage
+\section{Forecasting Theory}
+The goal of forecasting is to predict future values based on past data. To this end, a measure of the error of a prediction is required.
+\begin{defn}[\textit{Mean Squared Error}]
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, $X:\Omega\to\R^{n}$ a random vector, $Y:\Omega\to\R$ a random variable with $\mathbb{E}[Y^{2}]<\infty$, and $g:\R^{n}\to\R$ a Borel-measurable function with $\mathbb{E}[g(X)^{2}]<\infty$. Then the mean squared error of $g(X)$ as a predictor of $Y$ is defined as:
+\begin{equation}
+    \mathrm{MSE}(g(X))\coloneqq\mathbb{E}\left[(Y-g(X))^{2}\right].
+\end{equation}
+\end{defn}
+Now based on this error function, the notion of a best predictor is introduced. Note that in the next definition, the notation $\Lambda$ denotes the set of all square-integrable, Borel-measurable functions from $\R^{n}$ to $\R$, that is:
+\begin{equation*}
+    \Lambda\coloneqq\left\{g:\R^{n}\to \R \,\bigg|\, \int_{\R^{n}}\abs{g}^{2}\,\mathrm{d}\beta^{n}<\infty,\hspace{4pt}\textrm{$g^{-1}(B)\in\mathcal{B}(\R^{n})$ for all $B\in\mathcal{B}(\R)$}\right\},
+\end{equation*}
+where $\beta^{n}:\mathcal{B}(\R^{n})\to[0,\infty]$ is the $n$-dimensional Lebesgue-Borel measure.
+\begin{defn}[\textit{Best Predictor}]
+Let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\N$, be a sample of a stochastic process $(X_{t})_{t\in\Z}$ with $\mathbb{E}[X_{t}^{2}]<\infty$ for all $t\in\Z$. Then the best predictor of $X_{T+h}$ for $h>0$ is defined as:
+\begin{equation}
+    b_{T+h}(X_{\leq T})\coloneqq\argmin_{g\in\Lambda}\mathrm{MSE}(g(X_{\leq T})).
+\end{equation}
+\end{defn}
+As per the next result, the existence and uniqueness of the best predictor is ensured.
+\begin{prop}
+Let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\N$, be a sample of a stochastic process $(X_{t})_{t\in\Z}$ with $\mathbb{E}[X_{t}^{2}]<\infty$ for all $t\in\Z$. Then the best predictor of $X_{T+h}$ for $h>0$ is uniquely $\mathbb{P}$-a.s. given by:
+\begin{equation}
+    b_{T+h}(X_{\leq T})=\mathbb{E}[X_{T+h}\mid X_{\leq T}].
+\end{equation}
+\end{prop}
+\begin{proof}
+To prove the existence of the best predictor, note first that:
+\begin{align*}
+    \mathbb{E}\left[(X_{T+h}-g(X_{\leq T}))^{2}\right]&=\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}]+\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))^{2}\right]\\
+    &=\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])^{2}\right]+\mathbb{E}\left[(\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))^{2}\right]\\
+    &\qquad+2\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])(\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))\right].
+\end{align*}
+Next, it is shown that the last term above is equal to zero. To do so, employ \eqref{eq:cetp} and \eqref{eq:cepop}, respectively:
+\begin{align}\label{eq:proofbp1}
+    &\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])(\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))\right]\nonumber\\
+    &\qquad=\mathbb{E}\left[\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])(\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))\mid X_{\leq T}\right]\right]\nonumber\\
+    &\qquad=\mathbb{E}\left[(\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])\mid X_{\leq T}\right]\right].
+\end{align}
+%Notice that the use of \eqref{eq:cepop} above is justified since both $\mathbb{E}[X_{n+h}\mid X_{\leq n}]$ and $g(X_{\leq n})$ are $\sigma(X_{\leq n})$-measurable.\textcolor{red}{*} 
+Then from \eqref{eq:celin} and \eqref{eq:cepop}, it follows that:
+\begin{equation}\label{eq:proofbp2}
+    \mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])\mid X_{\leq T}\right]=\mathbb{E}[X_{T+h}\mid X_{\leq T}]-\mathbb{E}[X_{T+h}\mid X_{\leq T}]=0.
+\end{equation}
+Now \eqref{eq:proofbp1} and \eqref{eq:proofbp2} yield:
+\begin{equation*}
+\mathbb{E}[(X_{T+h}-g(X_{\leq T}))^{2}]=\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])^{2}\right]+\mathbb{E}\left[(\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))^{2}\right],
+\end{equation*}
+which implies, due to the positivity of squares, that:
+\begin{equation}\label{eq:proofbp3}
+    \mathbb{E}\left[(X_{T+h}-g(X_{\leq T}))^{2}\right]\geq\mathbb{E}\left[(X_{T+h}-\mathbb{E}[X_{T+h}\mid X_{\leq T}])^{2}\right],
+\end{equation}
+whence:
+\begin{equation*}
+    b_{T+h}(X_{\leq T})=\mathbb{E}[X_{T+h}\mid X_{\leq T}].
+\end{equation*}
+This concludes the proof of the existence of the best predictor. To prove uniqueness, note that the minimum in \eqref{eq:proofbp3} is attained only if:\textcolor{red}{*}
+\begin{equation*}
+    \mathbb{E}\left[(\mathbb{E}[X_{T+h}\mid X_{\leq T}]-g(X_{\leq T}))^{2}\right]=0\qquad\Rightarrow\qquad g(X_{\leq T})=\mathbb{E}[X_{T+h}\mid X_{\leq T}],\quad\textrm{$\mathbb{P}$-a.s.}\qedhere
+\end{equation*}
+\end{proof}
+
+
+

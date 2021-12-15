@@ -1,0 +1,683 @@
+%\newpage
+\section{GARCH Processes}
+\begin{defn}[\textit{Generalized Autoregressive Conditional Heteroskedasticity Process}]\label{defn:garch}
+Let $(p,q)\in\N_{0}^{2}$, and let $Z=(Z_{t})_{t\in\Z}\sim\mathrm{IID}(0,1)$. A stochastic process $X=(X_{t})_{t\in\Z}$ is called a $\mathrm{GARCH}(p,q)$ process (driven by $Z$) iff for all $t\in\Z$, it holds that:
+\begin{subequations}\label{eq:defn-garch}
+\begin{align}
+    X_{t}&=\sigma_{t}Z_{t}, \label{eq:defn-garch1}\\
+    \sigma_{t}^{2}&=\omega+\sum_{i=1}^{q}\alpha_{i}X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2}\label{eq:defn-garch2},
+\end{align}
+\end{subequations}
+where $\omega>0$, $\alpha_{i}\geq0$ for $i\in\{1,\dots,q\}$, and $\beta_{j}\geq0$ for $j\in\{1,\dots,p\}$.
+\end{defn}
+A more compact way of writing \eqref{eq:defn-garch2} is as follows:
+\begin{equation}\label{eq:jalskdjaslkd}
+    \sigma_{t}^{2}=\omega+\alpha(B)X_{t}^{2}+\beta(B)\sigma_{t}^{2},
+\end{equation}
+where $B:\R^{\Z}\to\R^{\Z}$ is the backshift operator, and:
+\begin{equation*}
+    \alpha(B)\coloneqq\sum_{i=1}^{q}\alpha_{i}B^{i},\quad
+    \beta(B)\coloneqq\sum_{j=1}^{p}\beta_{j}B^{j}.
+\end{equation*}
+Note that evidently it is assumed that $\alpha_{q}>0$ and $\beta_{q}>0$. Also, it is typically assumed that $Z$ follows an independent standard normal distribution, that is $Z\sim\mathrm{NID}(0,1)$, and if so a stochastic process $X$ satisfying \eqref{eq:defn-garch} is henceforth called a standard GARCH process. A discussion of other distribution choices for $Z$ is provided later in Subsection \ref{ss:ng}.
+
+Moreover, a non-anticipative GARCH process $X$ is a random variance model with respect to the natural filtration associated with $X$. Consequently, any non-anticipative GARCH process has the properties shown in Proposition \ref{prop:rvmfacts}. A more detailed discussion of properties of GARCH processes is provided later in Subsection \ref{ss:propsgm}.
+
+\begin{defn}[\textit{Weak GARCH Process}]\label{flotdo}
+A stochastic process $(X_{t})_{t\in\mathbb{Z}}$ is called a weak GARCH$(p,q)$ process if its first two conditional moments exist and satisfy:
+\begin{subequations}
+\begin{align}
+    & \mathbb{E}\left[X_{t}\mid X_{s},\hspace{2 pt} s<t\right] =0,\\
+    & \sigma_{t}^{2} =\textrm{Var}\left[X_{t}\mid X_{s},\hspace{2 pt} s<t\right]=\omega+\sum_{i=1}^{q}\alpha_{i}X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2}, 
+\end{align}
+\end{subequations}
+where $\omega >0$, $\alpha_{i}\geq 0$ for $i\in \{1,\dots, q\}$, and $\beta_{j}\geq 0$ for $j\in \{1,\dots, p\}$. 
+%\begin{enumerate}[label=(\roman*)]
+%\item $\mathbb{E}\left[\varepsilon_{t}\mid \varepsilon_{s},\hspace{2 pt} s<t\right]=0$,
+%\item There exist constants $\omega$, $\alpha_{i}, i=1,\dots, q$ and $\beta_{j}, j=1,\dots,p$ such that
+%\begin{equation}\label{garchdefn}
+%    \sigma_{t}^{2}=\textrm{Var}\left[\varepsilon_{t}\mid \varepsilon_{s},\hspace{2 pt} s<t\right]=\omega+\sum_{i=1}^{q}\alpha_{i}\varepsilon_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2}, \quad t\in\mathbb{Z}.
+%\end{equation}
+%\end{enumerate}
+\end{defn}
+
+%Note that \eqref{garchdefn} can be written more compactly as
+%\begin{equation}
+%    \sigma_{t}^{2}=\omega+\alpha(B)\varepsilon_{t}^{2}+\beta(B)\sigma_{t}^{2},\quad t\in\mathbb{Z},
+%\end{equation}
+%where $B:\mathbb{R}^{\mathbb{Z}}\to\mathbb{R}^{\mathbb{Z}}$ is the standard backshift operator, and $\alpha$ and $\beta$ are operator polynomials of degrees $p$ and $q$, respectively
+%\begin{equation*}
+%    \alpha(B)=\sum_{i=1}^{q}\alpha_{i}B^{i}, \quad \beta(B)=\sum_{j=1}^{p}\beta_{j}B^{j}
+%\end{equation*}
+
+%In general, Definition \ref{flotdo} is too general to obtain explicit solutions satisfying the stated conditions (i) and (ii). To remedy this, the following more restrictive definition is introduced:
+%\begin{defn}[\textit{Strong GARCH$(p,q)$-proces}]
+%Let $(\eta_{t})_{t\in\mathbb{Z}}$ be an i.i.d. sequence of real-valued random variables with $\mathbb{E}[\eta_{t}]=0$ and $\mathbb{E}[\eta_{t}^{2}]=1$ for all $t\in\mathbb{Z}$. The proces $(\varepsilon_{t})_{t\in\mathbb{Z}}$ is then called a strong GARCH$(p,q)$-proces with respect to  $(\eta_{t})_{t\in\mathbb{Z}}$ if 
+%\begin{align}\label{stronggarch}
+%\begin{split}
+%    \varepsilon_{t}& =\sigma_{t}\eta_{t},\\
+%    \sigma_{t}^{2}& =\omega+\sum_{i=1}^{q}\alpha_{i}\sigma_{t-i}^{2}\eta_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2}.
+%\end{split}
+%\end{align}
+%\end{defn}
+
+%\textcolor{red}{As shown later in Theorem \ref{} and Theorem \ref{}, assuming that a GARCH process is non-anticipative is innocuous}. Therefore, it is henceforth assumed, unless specified otherwise, that any GARCH process is non-anticipative.
+
+%To avoid repeatedly assuming that a particular GARCH process is non-anticipative, it is henceforth assumed, unless specified otherwise, that any GARCH process is non-anticipative. %Some particular properties of non-anticipative GARCH processes are introduced later in Subsection \ref{ss:propsgm}.
+
+%Moreover, note that a \textcolor{red}{non-anticipative} GARCH process $X$ is indeed a random variance model with $\mathcal{F}_{t-1}$ set equal to the $\sigma$-algebra induced by $(X_{s}\mid s<t)$ since then $Z_{t}$ is independent of $\mathcal{F}_{t-1}$, and $\sigma_{t}>0$ is $\mathcal{F}_{t-1}$-measurable. Consequently, any non-anticipative GARCH process has the properties shown in Proposition \ref{prop:rvmfacts} and Proposition \ref{prop:rvmkurt}. In this project report, it is henceforth assumed, unless specified otherwise, that any GARCH process is non-anticipative. Some particular properties of GARCH processes are introduced later in Subsection \ref{ss:propsgm}.
+
+
+
+%\newpage
+\subsection{Stationarity Study of GARCH Processes}
+A stationarity study of the GARCH$(1,1)$ process will now be conducted. A GARCH$(1,1)$ process takes the following form:
+\begin{align}\label{garch11}
+\begin{split}
+    X_{t}& =\sigma_{t}Z_{t}, \hspace{14 pt} (Z_{t})_{t\in \Z}\sim \mathrm{IID}(0,1),\\
+    \sigma_{t}^{2}& = \omega + \alpha X_{t-1}^{2}+\beta\sigma_{t-1}^{2},
+\end{split}
+\end{align}
+with $\omega>0$, $\alpha>0$, and $\beta>0$. Furthermore, we define the second-degree polynomial $a(z)\coloneqq \alpha z^{2}+\beta$.
+\begin{thm}[\textit{Strict Stationarity of $\mathrm{GARCH}(1,1)$ Process}]\label{lortesatning}
+Let $\alpha,\beta\geq 0$ and $(Z_{t})_{t\in \Z}\sim \mathrm{IID}(0,1)$. If:
+\begin{equation}
+    -\infty\leq \gamma\coloneqq\mathbb{E}\left[\log(\alpha Z_{t}^{2}+\beta)\right]<0,
+\end{equation}
+then the infinite series:
+\begin{equation}\label{sumsumsum}
+    h_{t}\coloneqq\left(1+\sum_{i=1}^{\infty}a(Z_{t-1})\dots a(Z_{t-i})\right)\omega
+\end{equation}
+converges almost surely and the process $(X_{t})_{t\in\Z}$ defined by $X_{t}=\sqrt{h_{t}}Z_{t}$ is the unique strictly stationary solution to \eqref{garch11}. This solution is non-anticipative. If $\gamma\geq 0$ and $\omega >0$, then there exists no strictly stationary solution. 
+\end{thm}
+\begin{proof}
+Firstly, for $x>0$, we let $\log^{+}x=\max\{0,\log x\}$. Note that $\gamma=\mathbb{E}[\log a(Z_{t})]$ always exists in $[-\infty,\infty)$ because $\mathbb{E}[\log^{+}a(Z_{t})]\leq \mathbb{E}[a(Z_{t})]=\alpha+\beta$. If we iteratively use the second equation in \eqref{garch11}, we obtain the following for $N\geq 1$:
+\begin{align}\label{sigmaballs}
+    \begin{split}
+        \sigma_{t}^{2}& = \omega +a(Z_{t-1})\sigma_{t-1}^{2}\\
+        & = \omega + a(Z_{t-1})\left(\omega+a(Z_{t-2})\sigma_{t-2}^{2}\right)\\
+        & = \omega\left(1+\sum_{n=1}^{N}a(Z_{t-1})\dots a(Z_{t-n})\right)+a(Z_{t-1})\dots a(Z_{t-N-1})\sigma_{t-N-1}^{2}\\
+        & = h_{t}(N)+a(Z_{t-1})\dots a(Z_{t-N-1})\sigma_{t-N-1}^{2},
+    \end{split}
+\end{align}
+where $h_{t}(N)\coloneqq \omega\left(1+\sum_{n=1}^{N}a(Z_{t-1})\dots a(Z_{t-n})\right)$. We have that $h_{t}=\lim_{N\to\infty}h_{t}(N)\in [0,\infty]$, since the summands are non-negative and $\omega>0$ by definition. Moreover, taking the limit as $N\to\infty$ in the recursive equation $h_{t}(N)=\omega+a(Z_{t-1})h_{t-1}(N-1)$ yields: 
+\begin{equation}
+    h_{t}=\omega+a(Z_{t-1})h_{t-1}. 
+\end{equation}
+We now show that $h_t$ is almost surely finite if and only if $\gamma<0$. Suppose that $\gamma<0$. Using the root test for convergence of infinite series, we obtain:
+\begin{equation}\label{bevsum}
+    \sqrt[n]{a(Z_{t-1})\dots a(Z_{t-n})}=\exp\left(\frac{1}{n}\sum_{i=1}^{n}\log a(Z_{t-i})\right)\to e^{\gamma}<1,
+\end{equation}
+as $n\to \infty$ by application of the strong law of large numbers to the sequence $\left(\log a(Z_{t})\right)_{t\in\Z}$. 
+%The strong law of large numbers states that if $(X_{i})_{i\in\N}$ is an i.i.d. sequence of random variables admitting an expectation, which isn't necessarily finite, then: 
+%\begin{equation}
+%    \frac{1}{n}\sum_{i=1}^{n}X_{i}\to \mathbb{E}[X_{1}],\hspace{12 pt} \mathbb{P}\textrm{- a.s.}
+%\end{equation}
+Since $\gamma = \mathbb{E}[\log(\alpha Z_{t}^{2}+\beta)]=\mathbb{E}[\log a(Z_{t})]$ by definition, we obtain \eqref{bevsum}.
+Thus, the series defined in \eqref{sumsumsum} converges almost surely in $\R$ since:
+\begin{equation*}
+    \limsup_{n\to\infty}\sqrt[n]{a(Z_{t-1})\dots a(Z_{t-n})}<1.
+\end{equation*}
+It follows that the process $(X_{t})_{t\in\Z}$ defined by:
+\begin{equation}
+    X_{t}\coloneqq \sqrt{h_{t}}Z_{t}=\left(\omega+\sum_{i=1}^{\infty}a(Z_{t-1})\dots a(Z_{t-i})\omega\right)^{1/2}Z_{t},
+\end{equation}
+is strictly stationary. The strict stationarity follows from the dominated convergence theorem, since we have a sequence of strictly stationary processes that converge almost surely to a limit, which consequently must also be strictly stationary. 
+%\textcolor{red}{The aforementioned strict stationarity and ergodicity of the process $(\varepsilon_{t})_{t\in\Z}$ follows from the fact that if you apply a measurable function $f:\R^{\Z}\to \R$ to an ergodic strictly stationary process, the result is also an ergodic strictly stationary process. In this case, we are applying a measurable function to the ergodic strictly stationary process $(\eta_{t})_{t\in\Z}$.}
+Moreover, $(X_{t})_{t\in\Z}$ is a non-anticipative solution of \eqref{garch11}.
+
+
+Now the uniqueness part of the theorem will proved. Thus, let $\Tilde{X}_{t}=\sigma_{t}Z_{t}$ denote another strictly stationary solution. Then:
+\begin{equation}
+    \sigma_{t}^{2}=h_{t}(N)+ a(Z_{t-1})\dots a(Z_{t-N-1})\sigma_{t-N-1}^{2}.
+\end{equation}
+It follows that:
+\begin{equation}
+    \sigma_{t}^{2}-h_{t}=\left\{h_{t}(N)-h_{t}\right\}+a(Z_{t-1})\dots a(Z_{t-N-1})\sigma_{t-N-1}^{2}.
+\end{equation}
+The term in the curly brackets on the right-hand side tends to $0$ $\mathbb{P}$-a.s. as $N\to\infty$. Furthermore, since the series defining $h_{t}$ converges almost surely, we have $a(Z_{t-1})\dots a(Z_{t-n})\to 0$ with probability $1$ as $n\to\infty$. In addition, the distribution of $\sigma_{t-N-1}^{2}$ is independent of $N$ by stationarity. Therefore, we have that $a(Z_{t-1})\dots a(Z_{t-N-1})\sigma_{t-N-1}^{2}\to 0$ in probability as $N\to \infty$. Since $\sigma_{t}^{2}-h_{t}$ is independent of $N$, we necessarily have $h_{t}=\sigma_{t}^{2}$, $\forall t\in \Z$ a.s.
+
+We now turn to the case, where $\gamma>0$. Once again using \eqref{bevsum} and the root test for convergence of infinite series, we obtain:
+\begin{equation}
+    \sum_{n=1}^{N}a(Z_{t-1})\dots a(Z_{t-n})\to \infty, \hspace{12 pt}\textrm{as}\hspace{12 pt} N\to\infty.
+\end{equation}
+Hence, if $\omega>0$, we have $h_{t}=\infty$ a.s. Using \eqref{sigmaballs}, we thus obtain that $\sigma_{t}^{2}=\infty$, and thus it follows that there exists no almost surely finite solution to \eqref{garch11}.
+
+The final case of $\gamma=0$ is proven by contradiction. Suppose there exists a strictly stationary solution $(X_{t},\sigma_{t}^{2})_{t\in\Z}$ to \eqref{garch11}. For $n>0$, we have:
+\begin{equation}
+    \sigma_{0}^{2}\geq\omega\left(1+\sum_{i=1}^{n}a(Z_{-1})\dots a(Z_{-i})\right)
+\end{equation}
+from which we deduce that $a(Z_{-1})\dots a(Z_{-n})\omega$ congerges to zero, a.s., as $n\to\infty$, or equivalently:
+\begin{equation}\label{chungfuchsuch}
+    \log \prod_{i=1}^{n}a(Z_{-i})+\log \omega=\sum_{i=1}^{n}\log a(Z_{-i})+\log\omega\to -\infty\hspace{12 pt}\textrm{as}\hspace{12 pt} n\to\infty.
+\end{equation}
+Since by assumption, we have that $\gamma=\mathbb{E}[\log a(Z_{-i})]=0$, the Chung-Fuchs theorem entails that $\limsup_{n\to\infty}\sum_{i=1}^{n}\log a(Z_{-i})=\infty$ with probability $1$, which contradicts \eqref{chungfuchsuch}. %\textcolor{red}{Hvad er det egentlig, vi har vist her?}
+%\textcolor{red}{Jeg fatter ikke en fucking skid af det her lortebevis.}
+\end{proof}
+
+\begin{thm}[\textit{Weak Stationarity of $\mathrm{GARCH}(p,q)$ Proces}]
+Let $\omega>0$, and let $\alpha_{i},\hspace{2 pt} i\in \{1,\dots, q\}$ and $\beta_{j},\hspace{2 pt} j\in \{1,\dots, p\}$. If there exists a GARCH$(p,q)$ process, which is weakly stationary and non-anticipative, then:
+\begin{equation}\label{ulighed}
+    \sum_{i=1}^{q}\alpha_{i}+\sum_{j=1}^{p}\beta_{j}<1.
+\end{equation}
+Conversely, if \eqref{ulighed} holds, then the unique strictly stationary solution to (1.8a) and (1.8b) is a weak white noise. In addition, there exists no other weakly stationary solution.
+\end{thm}
+\begin{proof}
+For notational simplicity, we only prove the case $p=q=1$. Thus, the stationary condition \eqref{ulighed} becomes $\alpha+\beta<1$. Let $(X_{t})_{t\in\Z}$ be a GARCH$(1,1)$ process according to Definition \ref{flotdo}, which is weakly stationary and non-anticipative. Then we have: 
+\begin{align}
+    \mathbb{E}[X_{t}^{2}]& =\mathbb{E}\left[\mathbb{E}[X_{t}^{2}\mid X_{s}, s<t]\right] =\mathbb{E}[\sigma_{t}^{2}]=\omega+(\alpha+\beta)\mathbb{E}[X_{t-1}^{2}],\\
+    \Rightarrow \hspace{9 pt}\omega &=(1-\alpha-\beta)\mathbb{E}[X_{t}^{2}].
+\end{align}
+Since $\omega> 0$, we must have $\alpha+\beta<1$. In addition, we get $\mathbb{E}[X_{t}^{2}]>0$, $\forall t\in \Z$. Conversely, suppose that $\alpha+\beta <1$. Then the strict stationary condition $-\infty\leq \gamma<0$ from Theorem \ref{lortesatning} is automatically satisfied, since by the concave Jensen's inequality:
+\begin{equation}
+    \mathbb{E}[\log a(Z_{t})]\leq \log \mathbb{E}[a(Z_{t})]=\log(\alpha+\beta)<0.
+\end{equation}
+It is thus sufficient to show that the strictly stationary solution $X_{t}=\sqrt{h_{t}}Z_{t}$ as defined in \eqref{sumsumsum} admits a finite variance. The variable $h_{t}$ being an increasing limit of positive random variables allows us to interchange expectations and the infinite series:
+\begin{align*}
+    \mathbb{E}[X_{t}^{2}]=\mathbb{E}[h_{t}Z_{t}^{2}]=\mathbb{E}[h_{t}]&=\left(1+\sum_{n=1}^{\infty}\mathbb{E}\left[a(Z_{t-1})\dots a(Z_{t-n})\right]\right)\omega\\
+    & = \left(1+\sum_{n=1}^{\infty}\mathbb{E}[a(Z_{t})]^{n}\right)\omega\\
+    & = \left(1+\sum_{n=1}^{\infty}(\alpha+\beta)^{n}\right)\omega=\frac{\omega}{1-\alpha-\beta}<\infty.
+\end{align*}
+The existence of the second moments imply the existence of the conditional moments, which altogether shows that this strongly stationary process is also weakly stationary. 
+Furthermore, this solution is a white noise process since:
+\begin{align*}
+    \mathbb{E}[X_{t}] & =\mathbb{E}\left[\mathbb{E}[X_{t} \mid X_{s},\hspace{2 pt} s<t]\right]=0,\\
+    \textrm{Cov}(X_{t}, X_{t-h})& =\mathbb{E}\left[X_{t-h}\mathbb{E}[X_{t}\mid X_{s},\hspace{2 pt} s<t]\right]=0,
+\end{align*}
+for all $h>0$. To prove uniqueness, let $(\Tilde{X}_{t})_{t\in\Z}$,\hspace{2 pt} $\Tilde{X}_{t}=\sqrt{\Tilde{h}_{t}}\eta_{t}$, denote another weakly stationary and non-anticipative solution. Then we have:
+\begin{equation}
+    |h_{t}-\Tilde{h}_{t}|=a(Z_{t-1})\dots a(Z_{t-n})|h_{t-n-1}-\Tilde{h}_{t-n-1}|.
+\end{equation}
+Taking expectations, we obtaion: 
+\begin{align}
+    \mathbb{E}[|h_{t}-\Tilde{h}_{t}|]& =\mathbb{E}[a(Z_{t-1})\dots a(Z_{t-n})]\mathbb{E}[|h_{t-n-1}-\Tilde{h}_{t-n-1}|]\\
+    & = (\alpha +\beta)^{n}\mathbb{E}[|h_{t-n-1}-\Tilde{h}_{t-n-1}|].
+\end{align}
+The expectation of $|h_{t-n-1}-\Tilde{h}_{t-n-1}|$ is bounded above by $\mathbb{E}[|h_{t-n-1}|]+\mathbb{E}[|\Tilde{h}_{t-n-1}|]$, which is finite and independent of $n$ by stationarity. Since $(\alpha+\beta)^{n}\to 0$ as $n\to 0$, we obtain $\mathbb{E}[|h_{t}-\Tilde{h}_{t}|]=0$, and thus $h_{t}=\Tilde{h}_{t}$ for all $t$ almost surely.
+\end{proof}
+
+%In order to study the stationary properties of a general GARCH$(p,q)$-process, we will introduce the following notation
+%    z_{t}=b_{t}+A_{t}z_{t-1},
+%\end{equation}
+%where 
+%\begin{equation*}
+%    b_{t}\coloneqq\begin{pmatrix}\omega\eta_{t}^{2}\\
+%    0\\
+%    \vdots\\
+%    \omega\\
+%    0\\
+%    \vdots\\
+%    0
+%    \end{pmatrix}\in\mathbb{R}^{p+q},
+%\hspace{16 pt}
+%z_{t}\coloneqq
+%\begin{pmatrix}
+%\varepsilon_{t}^{2}\\
+%\vdots\\
+%\varepsilon_{t-q+1}^{2}\\
+%\sigma_{t}^{2}\\
+%\vdots\\
+%\sigma_{t-p+1}^{2}
+%\end{pmatrix}\in\mathbb{R}^{p+q},\hspace{10 pt}
+%\end{equation*}
+%\begin{equation*}
+%    A_{t}\coloneqq
+%\begin{pmatrix}
+%\alpha_{1}\eta_{t}^{2} & \alpha_{2}\eta_{t}^{2} & \hdots & \alpha_{q}\eta_{t}^{2} & \beta_{1}\eta_{t}^{2} & \hdots & \beta_{p}\eta_{t}^{2}\\
+%1 & 0 & \hdots & 0 & 0 & \hdots & 0\\
+%0 & 1 & \hdots & 0 & 0 & \hdots & 0\\
+%\vdots & \ddots & \ddots & \vdots & \vdots & \ddots & \vdots\\
+%0 &  \hdots & 1 & 0 & 0 & \hdots & 0\\
+%\alpha_{1} & \alpha_{2} & \hdots & \alpha_{q} & \beta_{1} & \hdots & \beta_{p}\\
+%0 & 0 & \hdots & 0 & 1 &\hdots & 0\\
+%\vdots & \ddots & \ddots & \vdots & \vdots & \ddots & \vdots\\
+%0 & 0 & \hdots & 0 & \hdots &
+%1 & 0
+%\end{pmatrix}\in\mathbb{R}^{(p+q)\times (p+q)}.
+%\end{equation*}
+%It follows that \eqref{autoreg} defines a first-order vector-valued autoregressive model with positive and i.i.d. matrix coefficients. Iterating the autoregression \eqref{autoreg} gives 
+%\begin{equation}
+%    z_{t}=b_{t}+\sum_{i=1}^{\infty}\left(\prod_{j=1}^{i}A_{t-j+1}\right)b_{t-i}
+%\end{equation}
+%The main tool for studying the strict stationarity of a GARCH$(p,q)$-process will be the top Lyapunov exponent.
+
+\subsection{Properties and Alternative Representation of GARCH Processes}\label{ss:propsgm}
+\begin{prop}[\textit{Unconditional Variance of GARCH Process}]\label{prop:garch-var}
+Let $X=(X_{t})_{t\in\Z}$ be a non-anticipative, weakly stationary $\mathrm{GARCH}(p,q)$ process. %with $\mathbb{E}[X_{t}^{2}]<\infty$ for all $t\in\Z$. 
+Then:
+\begin{equation}\label{eq:uncondvar-garch}
+    \mathrm{Var}[X_{t}]=\mathbb{E}[X_{t}^{2}]=\frac{\omega}{1-\alpha(1)-\beta(1)}.
+\end{equation}
+\end{prop}
+\begin{proof}
+Note that:
+\begin{equation*}
+    \mathrm{Var}[X_{t}]=\mathbb{E}[X_{t}^{2}]=\mathbb{E}[\sigma_{t}^{2}]=\omega+\left(\alpha(1)+\beta(1)\right)\mathbb{E}[\sigma_{t}^{2}],
+\end{equation*}
+where the first two steps follow from (c) and (d) in Proposition \ref{prop:rvmfacts}, respectively, and the last step follows from \eqref{eq:jalskdjaslkd} and the stationarity assumption. This proves the desired result.
+\end{proof}
+
+\begin{prop}
+Let $X=(X_{t})_{t\in\Z}$ be a non-anticipative, standard $\mathrm{GARCH}(1,1)$ process with $\mathbb{E}[X_{t}^{4}]<\infty$ for all $t\in\Z$. Then:
+\begin{equation}
+    \kappa(X_{t})=\frac{3\left(1-(\alpha_{1}+\beta_{1})^{2}\right)}{1-(\alpha_{1}+\beta_{1})^{2}-2\alpha_{1}^{2}}>3.
+\end{equation}
+\end{prop}
+For the general $\mathrm{GARCH}(p,q)$ case, the interested reader is referred to \ref{}. %GM
+\begin{proof}
+First, note that from (d) and (e) in Proposition \ref{prop:rvmfacts}, it follows that:
+\begin{equation*}
+    \kappa(X_{t})=\frac{E[X_{t}^{4}]}{(\mathbb{E}[X_{t}^{2}])^{2}}=\frac{3\mathbb{E}[\sigma_{t}^{4}]}{(\mathbb{E}[\sigma_{t}^{2}])^{2}}.
+\end{equation*}
+Here the last step makes use of the fact that since $Z\sim\mathrm{NID}(0,1)$, it holds that $\mathbb{E}[Z_{t}^{4}]=3$. Now by employing that $X$ is weakly stationary, it is seen that:
+\begin{align*}
+    \mathbb{E}[\sigma_{t}^{4}]&=\frac{\omega^{2}+2\omega\mathbb{E}[\sigma_{t}^{2}](\alpha_{1}+\beta_{1})}{1-3\alpha_{1}^{2}-\beta_{1}^{2}-2\alpha_{1}\beta_{1}}%=\frac{\omega^{2}\left(1+2\frac{\alpha_{1}+\beta_{1}}{1-\alpha_{1}-\beta_{1}}\right)}{1-3\alpha_{1}^{2}-\beta_{1}^{2}-2\alpha_{1}\beta_{1}}
+    =\frac{\omega^{2}(1+\alpha_{1}+\beta_{1})}{(1-\alpha_{1}-\beta_{1})(1-3\alpha_{1}^{2}-\beta_{1}^{2}-2\alpha_{1}\beta_{1})}.
+\end{align*}
+Therefore:
+\begin{equation*}
+    \kappa(X_{t})=\frac{3(1+\alpha_{1}+\beta_{1})(1-\alpha_{1}-\beta_{1})}{1-3\alpha_{1}^{2}-\beta_{1}^{2}-2\alpha_{1}\beta_{1}}=\frac{3\left(1-(\alpha_{1}+\beta_{1})^{2}\right)}{1-(\alpha_{1}+\beta_{1})^{2}-2\alpha_{1}^{2}}>3,
+\end{equation*}
+where the inequality readily follows from the fact that $2\alpha_{1}^{2}>0$ by assumption. ***
+\end{proof}
+Recall that a stylized fact of financial time series is that squared returns show significant autocorrelation, whereas returns do not. As is evident by \eqref{eq:rvmprop1}, any non-anticipative GARCH process is able to reproduce the latter fact. The former fact can also be reproduced by any non-anticipative GARCH process, as per the following result.
+
+As a preliminary step to the introduction of this result, a useful alternative representation of a GARCH process is introduced. Suppose that $X=(X_{t})_{t\in\Z}$ is a non-anticipative $\mathrm{GARCH}(p,q)$ process with $\mathbb{E}[X_{t}^{4}]<\infty$ for all $t\in\Z$. Define:
+\begin{equation}
+    V_{t}\coloneqq X_{t}^{2}-\sigma_{t}^{2}=\sigma_{t}^{2}(Z_{t}^{2}-1),\quad t\in\Z.
+\end{equation}
+Note that the stochastic process $V=(V_{t})_{t\in\Z}$ satisfies properties analogous to (a), (c), and \eqref{eq:rvmprop1} in Proposition \ref{prop:rvmfacts}. Therefore, $V$ is a weak white noise process. %SFM-272
+Now, consider:
+\begin{equation*}
+    X_{t}^{2}=\sigma_{t}^{2}+V_{t}=\omega+\sum_{i=1}^{q}\alpha_{i}X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2}+V_{t}=\omega+\sum_{i=1}^{q}\alpha_{i}X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}X_{t-j}^{2}-\sum_{j=1}^{p}\beta_{j}V_{t-j}+V_{t}.
+\end{equation*}
+Set $m\coloneqq\max\{p,q\}$, $\alpha_{i}\coloneqq0$ for $i>p$, and $\beta_{j}\coloneqq0$ for $j>q$. Then:
+\begin{equation}\label{eq:garch-arma}
+    X_{t}^{2}=\omega+\sum_{i=1}^{m}(\alpha_{i}+\beta_{i})X_{t-i}^{2}-\sum_{j=1}^{p}\beta_{j}V_{t-j}+V_{t}
+\end{equation}
+Here \eqref{eq:garch-arma} is an $\mathrm{ARMA}(m,p)$ process for $X^{2}=(X_{t}^{2})_{t\in\Z}$ driven by the white noise $V$.
+\begin{prop}
+Let $X=(X_{t})_{t\in\Z}$ be a non-anticipative $\mathrm{GARCH}(1,1)$ process with $\mathbb{E}[X_{t}^{4}]<\infty$ for all $t\in\Z$. Then for all $h>0$, it holds that:
+\begin{equation*}
+    \mathrm{Corr}(X_{t-h}^{2},X_{t}^{2})\geq 0.
+\end{equation*}
+\end{prop}
+For the general $\mathrm{GARCH}(p,q)$ case, the interested reader is referred to \ref{}. %GM
+\begin{proof}
+Let us adopt the following notation:
+\begin{equation*}
+    \gamma_{X^{2}}(h)\coloneqq\mathrm{Cov}(X_{t-h}^{2},X_{t}^{2}),\quad\rho_{X^{2}}(h)\coloneqq\frac{\gamma_{X^{2}}(h)}{\gamma_{X^{2}}(0)}=\mathrm{Corr}(X_{t+h}^{2},X_{t}^{2}).
+\end{equation*}
+Then, from a classical result about the covariance of \eqref{eq:garch-arma}, it follows that:
+\begin{equation*}
+    \gamma_{X^{2}}(h)=(\alpha_{1}+\beta_{1})\gamma_{X^{2}}(h-1)=(\alpha_{1}+\beta_{1})^{h-1}\gamma_{X^{2}}(1),
+\end{equation*}
+where the last step follows by recursive substitution. Now, consider the $\mathrm{MA}(\infty)$ representation of \eqref{eq:garch-arma}:
+\begin{equation*}
+    X_{t}^{2}=\frac{\omega}{1-\alpha_{1}-\beta_{1}}+V_{t}+\alpha_{1}\sum_{i=1}^{\infty}(\alpha_{1}+\beta_{1})^{i-1}V_{t-i}.
+\end{equation*}
+Consequently, by employing that $V=(V_{t})_{t\in\Z}$ is a weak white noise, it is seen that:
+\begin{equation*}
+    \gamma_{X^{2}}(0)=\mathbb{E}[V_{t}^{2}]\left(1+\alpha_{1}^{2}\sum_{i=1}^{\infty}(\alpha_{1}+\beta_{1})^{2(i-1)}\right)=\mathbb{E}[V_{t}^{2}]\left(1+\frac{\alpha_{1}^{2}}{1-(\alpha_{1}+\beta_{1})^{2}}\right).
+\end{equation*}
+Likewise:
+\begin{equation*}
+    \gamma_{X^{2}}(1)=\mathbb{E}[V_{t}^{2}]\left(\alpha_{1}+\alpha_{1}^{2}(\alpha_{1}+\beta_{1})\sum_{i=1}^{\infty}(\alpha_{1}+\beta_{1})^{2(i-1)}\right)=\mathbb{E}[V_{t}^{2}]\left(\alpha_{1}+\frac{\alpha_{1}^{2}(\alpha_{1}+\beta_{1})}{1-(\alpha_{1}+\beta_{1})^{2}}\right).
+\end{equation*}
+Therefore:
+\begin{equation*}
+    \rho_{X^{2}}(h)=(\alpha_{1}+\beta_{1})^{h-1}\frac{\left(\alpha_{1}+\frac{\alpha_{1}^{2}(\alpha_{1}+\beta_{1})}{1-(\alpha_{1}+\beta_{1})^{2}}\right)}{\left(1+\frac{\alpha_{1}^{2}}{1-(\alpha_{1}+\beta_{1})^{2}}\right)},
+\end{equation*}
+which is evidently positive for any $h>0$.
+\end{proof}
+
+%\newpage
+\subsection{Estimation of GARCH Processes}\label{ss:estimation-garch}
+%GM, &LNonGM, %HFTS4, %rugarch
+For this subsection, let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\N$, denote a sample from a stochastic process $X=(X_{t})_{t\in\Z}$. Assume that $X$ follows a non-anticipative GARCH$(p,q)$ process driven by $Z=(Z_{t})_{t\in\Z}$. For now suppose that the order $(p,q)\in\N_{0}^{2}$ is known. This assumption will be relaxed shortly. The parameter vector is denoted by $\theta$, that is:
+\begin{equation}\label{eq:est-parvector}
+    \theta\coloneqq(\omega,\alpha_{1},\dots,\alpha_{q},\beta_{1},\dots,\beta_{p})^{\top}.
+\end{equation}
+Note that this parameter vector belongs to the parameter space $\Theta\subseteq(0,\infty)\times[0,\infty)^{p+q}$. The true parameter vector $\theta_{0}\coloneqq(\omega_{0},\alpha_{01},\dots,\alpha_{0q},\beta_{01},\dots,\beta_{0p})^{\top}$ is unknown.
+
+\subsubsection{Estimation via Maximum Likelihood}
+First, assume that the initial values $X_{i}$ for $i\in\{0,\dots,1-q\}$ and $\tilde{\sigma}_{j}^{2}$ for $j\in\{0,\dots,1-p\}$ are known. More on this assumption shortly. Then, $\tilde{\sigma}_{t}^{2}$ can be defined recursively for $t\geq 1$:
+\begin{equation}\label{eq:est-sigma}
+    \tilde{\sigma}_{t}^{2}\coloneqq\tilde{\sigma}_{t}^{2}(\theta)\coloneqq\omega+\sum_{i=1}^{q}\alpha_{i}X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\tilde{\sigma}_{t-j}^{2}.
+\end{equation}
+Now, conditioned one these initial values, the likelihood function for the full sample $X_{\leq T}$ is given by:
+\begin{equation*}
+    L(\theta; X_{\leq T})\coloneqq f(X_{\leq T};\theta)=\prod_{t=1}^{T}f(X_{t}\mid X_{\leq t-1};\theta)\textcolor{red}{\,=\prod_{t=1}^{T}\frac{1}{\tilde{\sigma}_{t}}f(Z_{t})},
+\end{equation*}
+where the second step follows by repeated use of the fact that the joint density function can be written as a product of a conditional density function and a marginal density function, \textcolor{red}{and the last step follows from assumption that $Z\sim\mathrm{IID}(0,1)$}. Hence, the log-likelihood function for the $t$-th observation is given by:
+\begin{equation}\label{eq:tth-log-like}
+    \ell_{t}(\theta;X_{t})\coloneqq\log\left(f_{X}(X_{t}\mid X_{\leq t-1};\theta)\right)=\log(f(Z_{t}))-\frac{1}{2}\log(\tilde{\sigma}_{t}^{2}),
+\end{equation}
+which implies that the log-likelihood for the full sample is given by:
+\begin{equation*}
+    \ell(\theta;X_{\leq T})=\sum_{t=1}^{T}\ell_{t}(\theta;X_{t}).
+\end{equation*}
+The maximum likelihood estimator is defined as:
+\begin{equation}\label{eq:garch-mle}
+    \hat{\theta}_{T}^{\mathrm{ML}}\coloneqq\argmax_{\theta\in\Theta}\ell(\theta;X_{\leq T}).
+\end{equation}
+To implement the maximum likelihood procedure, an explicit assumption about the distribution of $Z$ is necessary. As previously mentioned, it is typically assumed that $Z\sim\mathrm{NID}(0,1)$, that is:
+\begin{equation*}
+    f(Z_{t})=(2\pi)^{-1/2}\exp\left(-\frac{Z_{t}^{2}}{2}\right),
+\end{equation*}
+which per \eqref{eq:tth-log-like} yields that the log-likelihood for the $t$-th observation is given by:
+\begin{equation}\label{eq:normal-tth-log-like}
+    \ell_{t}(\theta;X_{t})=-\frac{1}{2}\log(2\pi)-\frac{1}{2}Z_{t}^{2}-\frac{1}{2}\log(\tilde{\sigma}_{t}^{2}).
+\end{equation}
+Other distributions of $Z$ are, as also previously mentioned, seen later in Subsection \ref{ss:ng}.
+
+An alternative approach that does not require any assumptions about the distribution of $Z$ is the so-called Gaussian quasi-maximum likelihood procedure. Here it is assumed that the model is misspecified, that is, the true conditional density function $f_{0}(X_{t}\mid X_{\leq t-1})$ does not belong to the specified density family $\left\{f(X_{t}\mid X_{\leq t-1};\theta),\,\theta\in\Theta\right\}$. This leads to the concept of a quasi true value $\theta_{0}^{*}$ of the parameter $\theta$ that corresponds to the distribution in the model that is closest to $f_{0}$. The Gaussian quasi-maximum likelihood estimator is:
+\begin{equation}\label{eq:garch-qmle}
+    \hat{\theta}_{T}^{\mathrm{QML}}\coloneqq\argmax_{\theta\in\Theta}\ddot{\ell}(\theta;X_{\leq T}),\quad\ddot{\ell}(\theta;X_{\leq T})\coloneqq-\frac{T}{2}\log(2\pi)-\frac{1}{2}\left(\sum_{t=1}^{T}Z_{t}^{2}+\log(\tilde{\sigma}_{t}^{2})\right).
+\end{equation}
+In practice, the maximization in \eqref{eq:garch-mle} and \eqref{eq:garch-qmle} is done using numerical optimization techniques, the brief details of which are provided later in Subsection \ref{ss:intro-rugarch}.
+
+Moreover, note that under certain regularity conditions, it can be shown that both \eqref{eq:garch-mle} and \eqref{eq:garch-qmle} are asymptotically strongly consistent and normally distributed. An important difference between these two estimators is that the latter is possibly less efficient. For more precise details, the interested reader is referred to \ref{} and the references therein. %HFTS4
+
+Let us now briefly return to the assumption above made in regards to the initial values $X_{i}$ for $i\in\{0,\dots,1-q\}$ and $\tilde{\sigma}_{j}^{2}$ for ${j}\in\{0,\dots,1-p\}$ being known. These initial values are evidently unknown in practice, and therefore, their values need to be chosen. A reasonable choice under a weak stationarity assumption is apparently the unconditional variance in \eqref{eq:uncondvar-garch}. However, if this stationarity assumption is not imposed, a common choice is:
+\begin{equation*}
+    X_{i}=\tilde{\sigma}_{j}^{2}=\frac{1}{T}\sum_{t=1}^{T}X_{t}^{2}.
+\end{equation*}
+%\begin{equation*}
+%    X_{i}^{2}=\tilde{\sigma}_{j}^{2}=\omega,\quad X_{i}^{2}=\tilde{\sigma}_{j}^{2}=X_{1}^{2},\quad\mathrm{or}\quad X_{i}=\tilde{\sigma}_{j}^{2}=\frac{1}{T}\sum_{t=1}^{T}X_{t}^{2}.%\quad i\in\{0,\dots,1-q\},\hspace{3pt} j\in\{0,\dots,1-p\}.
+%\end{equation*}
+Note that the choice of initial values does not affect the asymptotic properties of \eqref{eq:garch-mle}. However, in practice, some care is necessary to avert a local maximum in \eqref{eq:garch-mle}.
+
+Lastly, we relax the assumption that the order $(p,q)\in\N_{0}^{2}$ of the GARCH process $X$ is known. Recall that $X^{2}$ has an ARMA representation as in \eqref{eq:garch-arma}. Therefore, the order of a GARCH process can be determined by minimizing traditional information criteria that penalize overfitting at different rates. The Akaika (AIC), Bayesian (BIC), Hannan-Quinn (HQIC), and Shibata (SIC) information criteria are introduced below:
+\begin{align*}
+    \mathrm{AIC}&\coloneqq\frac{-2\ell(\theta;X_{\leq T})}{T}+\frac{2k}{T},&\mathrm{BIC}&\coloneqq\frac{-2\ell(\theta;X_{\leq T})}{T}+\frac{k\log(T)}{T},\\
+    \mathrm{HQIC}&\coloneqq\frac{-2\ell(\theta;X_{\leq T})}{T}+\frac{2k\log(\log(T))}{T},&\mathrm{SIC}&\coloneqq\frac{-2\ell(\theta;X_{\leq T})}{T}+\log\left(\frac{T+2k}{T}\right),
+\end{align*}
+where $k$ is the dimension of the parameter space $\Theta$. In particular, $k=1+p+q$ in the case of a standard $\mathrm{GARCH}(p,q)$ process as discussed above.
+
+
+%\newpage
+%First, notice that the likelihood function for the full sample is given by:
+%\begin{equation*}
+%    L(\theta; X_{\leq T})\coloneqq f_{T}(X_{\leq T};\theta)=\prod_{t=1}^{T}f_{t\mid t-1}(X_{t}\mid X_{\leq t-1};\theta),
+%\end{equation*}
+%where the last step follows by repeated use of the fact that the joint density function $f_{T}(\cdot)$ can be written as a product of a conditional density function and a marginal density function. Now, assume that the initial values $X_{i}$ for $i\in\{0,\dots,1-q\}$ and $\tilde{\sigma}_{j}^{2}$ for $j\in\{0,\dots,1-p\}$ are known. More on this assumption shortly. Then, $\tilde{\sigma}_{t}^{2}$ can be defined recursively for $t\geq 1$ by:
+%\begin{equation*}
+%    \tilde{\sigma}_{t}^{2}\coloneqq\tilde{\sigma}_{t}^{2}(\theta)\coloneqq\omega+\sum_{i=1}^{q}\alpha_{i}X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\tilde{\sigma}_{t-j}^{2},
+%\end{equation*}
+%whence the conditional densities $f_{t\mid\leq t-1}(\cdot)$ are known at any time $t$, which by the assumption that $X$ is non-anticipative and $Z$ is independent, implies that:
+%\begin{equation*}
+%    L(\theta;X_{\leq T})=\prod_{t=1}^{T}f_{X}(X_{t};\theta).
+%\end{equation*}
+%The log-likelihood function for the $t$-th observation is given by:
+%\begin{equation}\label{eq:tth-log-like}
+%    \ell_{t}(\theta;X_{t})%\coloneqq\log(L(\theta;X_{t}))
+%    \coloneqq\log\left(f_{X}(X_{t};\theta)\right)=\log(f_{Z}(Z_{t};\theta))-\frac{1}{2}\log(\sigma_{t}^{2}),\quad t\in\{1,\dots,T\}.
+%\end{equation}
+%\textcolor{red}{This follows from the fact that:
+%\begin{equation*}
+%    f_{X}(X_{t};\theta)=f_{Z}(Z_{t};\theta)\abs{J},\quad J=\frac{\partial Z_{t}}{\partial X_{t}}=\frac{1}{\sigma_{t}},
+%\end{equation*}
+%where $J$ is the Jacobian that arises by xx}. Hence, the log-likelihood function for the full sample is given by:
+%\begin{equation*}
+%    \ell(\theta; X_{\leq T})=\sum_{t=1}^{T}\ell_{t}(\theta;X_{t})
+%\end{equation*}
+%So, the maximum likelihood estimator is:
+%\begin{equation}\label{eq:garch-mle}
+%    \hat{\theta}_{T}\coloneqq\argmax_{\theta\in\Theta}\ell(\theta;X_{\leq T}).
+%\end{equation}
+%In practice, the maximization in \eqref{eq:garch-mle} is done using numerical optimization techniques.* %%This is beyond the scope of this project report. The interested reader is referred to \ref{}.
+%%Assuming that $\Theta$ is open, and that the log-likelihood function is $C^{1}$, the maximum likelihood estimator must satisfy that:
+%%\begin{equation}\label{eq:full-score}
+%%    S_{T}(\theta;X_{\leq T})%\coloneqq\frac{\partial}{\partial\theta}\ell_{T}(\theta;X_{\leq T})
+%%    \coloneqq\sum_{t=1}^{T}s_{t}(\theta;X_{t})=0,
+%%\end{equation}
+%%where the score function for the $t$-th observation is given by:
+%%\begin{equation}\label{eq:tth-score}
+%%    s_{t}(\theta;X_{t})\coloneqq\frac{\partial\ell_{t}(\theta;X_{t})}{\partial\theta}=\frac{1}{f_{Z}(Z_{t}(\theta);\theta)}\frac{\partial f_{Z}(Z_{t}(\theta);\theta)}{\partial Z_{t}}\frac{\partial Z_{t}(\theta)}{\partial\theta}-\frac{1}{2\sigma_{t}^{2}(\theta)}\frac{\partial\sigma_{t}^{2}(\theta)}{\partial\theta},
+%%\end{equation}
+%%with:
+%%\begin{equation*}
+%%    \frac{\partial Z_{t}(\theta)}{\partial\theta}=\frac{\partial}{\partial\theta}\left(\frac{X_{t}}{\sqrt{\sigma_{t}^{2}(\theta)}}\right)=-\frac{\frac{1}{2}(\sigma_{t}^{2})^{-1/2}\frac{\partial\sigma_{t}^{2}(\theta)}{\partial\theta}X_{t}}{\sigma_{t}^{2}(\theta)}%=-\frac{1}{2}\left(\sigma_{t}^2(\theta)\right)^{-3/2}\frac{\partial\sigma_{t}^{2}(\theta)}{\partial\theta}X_{t}
+%%    =-\frac{1}{2\sigma_{t}^{2}(\theta)}\frac{\partial\sigma_{t}^{2}(\theta)}{\partial\theta}X_{t}.
+%%\end{equation*}
+%%In practice, the $p+q+1$ equations in \eqref{eq:full-score} is solved using numerical optimization methods.
+
+%To implement the maximum likelihood procedure an explicit assumption about the distribution of $Z$ is necessary. As previously mentioned, it is typically assumed that $Z\sim\mathrm{NID}(0,1)$. Then:
+%\begin{equation*}
+%    f(Z_{t};\theta)=(2\pi)^{-1/2}\exp\left(-\frac{Z_{t}^{2}}{2}\right),
+%\end{equation*}
+%which per \eqref{eq:tth-log-like} yields that the log-likelihood for the $t$-th observation is given by:
+%\begin{equation}\label{eq:normal-tth-log-like}
+%    \ell_{t}(\theta;X_{t})=-\frac{1}{2}\log(2\pi)-\frac{1}{2}Z_{t}^{2}-\frac{1}{2}\log(\sigma_{t}^{2}).
+%\end{equation}
+%Other distributions of $Z$ are, as also previously mentioned, seen later in Subsection \ref{ss:ng}.
+
+%Although, it is beyond the scope of this project report, it can be shown that \eqref{eq:garch-mle}, under certain regularity conditions, is asymptotically strongly consistent and normally distributed. For more precise details, the interested reader is referred to \ref{} and the references therein. %HFTS4
+
+%Let us now briefly return to the assumption above made in regards to the initial values $X_{i}$ for $i\in\{0,\dots,1-q\}$ and $\tilde{\sigma}_{j}^{2}$ for ${j}\in\{0,\dots,1-p\}$ being known. These initial values are evidently unknown in practice, and therefore, their values need to be chosen. A reasonable choice under the weakly stationarity assumption is apparently the unconditional variance in \eqref{eq:uncondvar-garch}. If this stationarity assumption is not imposed, some reasonable choices are apparently as follows:
+%\begin{equation*}
+%    X_{i}^{2}=\tilde{\sigma}_{j}^{2}=\omega,\quad X_{i}^{2}=\tilde{\sigma}_{j}^{2}=X_{1}^{2},\quad\mathrm{or}\quad X_{i}=\tilde{\sigma}_{j}^{2}=\frac{1}{T}\sum_{t=1}^{T}X_{t}^{2}.%\quad i\in\{0,\dots,1-q\},\hspace{3pt} j\in\{0,\dots,1-p\}.
+%\end{equation*}
+%Note that the choice of initial values does not affect the asymptotic properties of \eqref{eq:garch-mle}. However, in practice, some care is necessary to avert a local maximum in \eqref{eq:garch-mle}.
+
+%\subsubsection{Asymptotic Properties of Maximum Likelihood Estimator}
+
+%The asymptotic properties of the maximum likelihood estimator in \eqref{eq:garch-mle} are introduced below.
+%\begin{thm}
+%Assume that certain regularity conditions hold. Then \eqref{eq:garch-mle} is strongly consistent, that is:
+%\begin{equation*}
+%    \hat{\theta}_{T}\overset{\textrm{a.s.}}{\longrightarrow}\theta_{0}\quad\textrm{as}\quad T\to\infty.
+%\end{equation*}
+%Assume that additional regularity conditions hold. Then \eqref{eq:garch-mle} is asymptotic normal with:
+%\begin{equation*}
+%    \sqrt{T}\left(\hat{\theta}_{T}-\theta_{0}\right)\overset{d}{\to}\mathrm{N}\left(0,\frac{4}{\tilde{I}_{f}}J^{-1}\right)
+%\end{equation*}
+%where:
+%\begin{equation*}
+%    \tilde{I}_{f}\coloneqq\int(1+g(y))^{2}f(y)\,\mathrm{d}y,\quad g(y)\coloneqq y\frac{f'(y)}{f(y)},\quad J\coloneqq\mathbb{E}_{\theta_{0}}\left[\frac{\partial^{2}\ell_{t}(\theta_{0};X_{t})}{\partial\theta\partial\theta^{\top}}\right]
+%\end{equation*}
+%\end{thm}
+%For details about the proof of this result as well as a discussion about the imposed regularity conditions, the interested reader is referred to \ref{} and the references therein.%HFTS4
+
+%\newpage
+\section{GARCH Extensions}
+This section introduces several extensions to the basic GARCH model intending to better capture the previously discussed stylized facts of financial time series.
+\subsection{Asymmetric GARCH Processes}\label{ss:asymmetric}
+So far, the standard GARCH model has been shown to reproduce all stylized facts apart from the leverage effect. That the standard GARCH model fails to reproduce the leverage effect follows by the fact that the model specifies the volatility to only depend on squared past values, and whence, the sign of past values does not effect the volatility. The subsequent GARCH model extensions aim to incorporate the leverage effect.
+\begin{defn}[\textit{Exponential GARCH Process}]
+Let $(p,q)\in\N_{0}^{2}$, and let $Z=(Z_{t})_{t\in\Z}\sim\mathrm{IID}(0,1)$. A stochastic process $X=(X_{t})_{t\in\Z}$ is called an $\mathrm{EGARCH}(p,q)$ process (driven by $Z$) iff for all $t\in\Z$, it holds that:
+\begin{subequations}\label{eq:defn-egarch}
+\begin{align}
+    X_{t}&=\sigma_{t}Z_{t}, \label{eq:defn-egarch1}\\
+    \log(\sigma_{t}^{2})&=\omega+\sum_{i=1}^{q}\alpha_{i}g(Z_{t-i})+\sum_{j=1}^{p}\beta_{j}\log(\sigma_{t-j}^{2})\label{eq:defn-egarch2},\\
+    g(Z_{t})&=\theta Z_{t}+\lambda\left(\abs{Z_{t}}-\mathbb{E}\left[\abs{Z_{t}}\right]\right)\label{eq:defn-egarch3},
+\end{align}
+\end{subequations}
+where $\omega$, $\alpha_{i}$ for $i\in\{1,\dots,q\}$, $\beta_{j}$ for $j\in\{1,\dots,p\}$, $\theta$, and $\lambda$ are all real numbers.***
+\end{defn}
+Note that the function $g:\R\to\R$ defined in \eqref{eq:defn-egarch3} is a linear combination of $Z_{t}$ and $\abs{Z_{t}}$. The first term, $\theta Z_{t}$, determines the sign effect whereas the second term, $\lambda(\abs{Z_{t}}-\mathbb{E}[\abs{Z_{t}}])$, determines the magnitude effect. To see that the second term determines the magnitude effect, suppose that $\theta=0$ and $\lambda>0$, then $g$ is positive (negative) when the magnitude of $Z_{t}$ is larger (smaller) than its expected value. To see that the first term determines the sign effect, suppose that $\theta<0$ and $\lambda=0$, then $g$ is positive (negative) when $Z_{t}$ is negative (positive). So, an EGARCH process is able to capture the leverage effect when $\theta<0$.
+
+%To see that the second term determines the magnitude effect, observe first that if $Z_{t}\in(0,\infty)$, then $g$ is linear with slope $\theta+\lambda$ and intercept $-\mathbb{E}[Z_{t}]$. Conversely, if $Z_{t}\in(-\infty,0]$, then $g$ is linear with slope $\theta-\lambda$ and intercept $\mathbb{E}[Z_{t}]$. Suppose that $\theta=0$ and $\lambda>0$, then g is positive (negative) when the magnitude of $Z_{t}$ is larger (smaller) than its expected value. Now, suppose that $\theta<0$ and $\lambda=0$, then $g$ is positive (negative) when $Z_{t}$ is negative (positive). Therefore, an EGARCH process is able to capture the leverage effect when $\theta<0$.
+
+Moreover, note that for any EGARCH process, it holds that $(\sigma_{t})_{t\in\Z}$ is non-negative for all $t\in\Z$ regardless of the coefficients in $\eqref{eq:defn-egarch2}$ since the logarithm of $\sigma_{t}^{2}$ is being modelled instead of $\sigma_{t}^{2}$ itself. Therefore, any non-anticipative EGARCH process $X$ is also a random variance model with respect to the natural filtration associated with $X$.
+
+For a detailed discussion about estimation and a stationarity study of EGARCH processes, the interested reader is referred to \ref{} and \ref{}. %2938260%GM
+\begin{defn}[\textit{Threshold GARCH Process}]
+Let $(p,q)\in\N_{0}^{2}$, and let $Z=(Z_{t})_{t\in\Z}\sim\mathrm{IID}(0,1)$. A stochastic process $X=(X_{t})_{t\in\Z}$ is called a $\mathrm{TGARCH}(p,q)$ process (driven by $Z$) iff for all $t\in\Z$, it holds that:
+\begin{subequations}\label{eq:defn-tgarch}
+\begin{align}
+    X_{t}&=\sigma_{t}Z_{t}, \label{eq:defn-tgarch1}\\
+    \sigma_{t}&=\omega+\sum_{i=1}^{q}\alpha_{i^{+}}X_{t-i}^{+}+\alpha_{i^{-}}X_{t-i}^{-}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}\label{eq:defn-tgarch2},
+\end{align}
+\end{subequations}
+where $\omega$, $\alpha_{i^{+}}$ and $\alpha_{i^{-}}$ for $i\in\{1,\dots,q\}$, and $\beta_{j}$ for $j\in\{1,\dots,p\}$ are all real numbers.
+\end{defn}
+Here $X_{t}^{+}\coloneqq\max\{X_{t},0\}$ and $X_{t}^{-}\coloneqq\max\{-X_{t},0\}$. Note that a TGARCH process captures the leverage effect by allowing the coefficients $\alpha_{i^{+}}$ and $\alpha_{i^{-}}$ in \eqref{eq:defn-tgarch2} to vary for different lags $i$ of the past values of $X$. 
+
+Moreover, observe that for a TGARCH process, it is not assumed that $(\sigma_{t})_{t\in\Z}$ is positive, since no restrictions are imposed on the coefficients in \eqref{eq:defn-tgarch2}. However, as far as Definition \ref{defn:rvm}, it is required that $\sigma_{t}>0$ for all $t\in\Z$. Therefore, it is assumed, in this project report, that the coefficients in \eqref{eq:defn-tgarch2} satisfy constrains analogous to the constraints of the coefficients in \eqref{eq:defn-garch2}, that is, $\omega>0$, $\alpha_{i^{+}}\geq0$ and $\alpha_{i^{-}}\geq0$ for all $i\in\{1,\dots,q\}$, and $\beta_{j}\geq0$ for $j\in\{1,\dots,p\}$. 
+These constraints are often also imposed when studying probabilistic properties of a TGARCH process, see for instance \ref{} for more details. For a detailed discussion about estimation and stationarity of a TGARCH process, the interested reader is again referred to \ref{} as well as \ref{}. %zakoian1994%GM
+
+
+
+%Therefore, in this project report, it is assumed that the coefficients in \eqref{eq:defn-tgarch2} satisfy constraints analogous to the constraints of the coefficients \eqref{eq:defn-garch2}, that is, $\omega>0$, $\alpha_{i^{+}}\geq0$ and $\alpha_{i^{-}}\geq0$ for all $i\in\{1,\dots,q\}$, and $\beta_{j}\geq0$ for $j\in\{1,\dots,p\}$. So, as before, any non-anticipative TGARCH process $X$ is also a random variance model with respect to the natural filtration associated with $X$.
+
+%For a detailed discussion about estimation and a stationarity study of TGARCH processes, the interested reader is referred to \ref{} and \ref{}.
+
+A variant of a TGARCH process called a symmetric TGARCH (STGARCH) or sometimes absolute value GARCH (AVGARCH) corresponds to the special case where $\alpha_{i^{+}}=\alpha_{i^{-}}\coloneqq\alpha_{i}$ for all $i$ in \eqref{eq:defn-tgarch2}, that is:
+\begin{equation}
+    \sigma_{t}=\omega+\sum_{i=1}^{q}\alpha_{i}\abs{X_{t-i}}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j},
+\end{equation}
+since $\abs{X_{t}}=X_{t}^{+}+X_{t}^{-}$. A second variant of a TGARCH process called a GJR-GARCH process corresponds to squaring the variables in \eqref{eq:defn-tgarch2}, that is:
+\begin{equation}\label{eq:defn-gjrgarch}
+    \sigma_{t}^{2}=\omega+\sum_{i=1}^{q}\left(\alpha_{i}+\gamma_{i}\mathbbm{1}_{\{X_{t-i}<0\}}\right)X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2},
+\end{equation}
+where $\mathbbm{1}_{\{X_{t}<0\}}$ denotes an indicator function signifying whether or not $X_{t}$ is negative. This specification captures the leverage effect by allowing for a coefficient $\gamma_{i}>0$ to appear only when $X_{t}$ is negative.
+
+
+%If the coefficients in \eqref{eq:defn-tgarch1} satisfy constraints analogous to the constraints of the coefficients \eqref{eq:defn-garch2}, that is, $\omega>0$, $\alpha_{i}\geq0$ and $\gamma_{i}\geq0$ for all $i\in\{1,\dots,q\}$, and $\beta_{j}\geq0$ for $j\in\{1,\dots,p\}$, then:
+%\begin{equation*}
+%    \mathbb{E}
+%\end{equation*}
+
+
+\begin{defn}[Asymmetric Power GARCH Process]
+Let $(p,q)\in\N_{0}^{2}$, and let $Z=(Z_{t})_{t\in\Z}\sim\mathrm{IID}(0,1)$. A stochastic process $X=(X_{t})_{t\in\Z}$ is called an $\mathrm{APGARCH}(p,q)$ process (driven by $Z$) iff for all $t\in\Z$, it holds that:
+\begin{subequations}\label{eq:defn-aparch}
+\begin{align}
+    X_{t}&=\sigma_{t}Z_{t}, \label{eq:defn-aparch1}\\
+    \sigma_{t}^{d}&=\omega+\sum_{i=1}^{q}\alpha_{i}(\abs{X_{t-i}}-\gamma_{i} X_{t-i})^{d}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{d}\label{eq:defn-aparch2},
+\end{align}
+\end{subequations}
+where $\omega,>0$, $d>0$, $\alpha_{i}\geq0$ and $\abs{\gamma_{i}}\leq 1$ for $i\in\{1,\dots,q\}$, and $\beta_{j}\geq0$ for $j\in\{1,\dots,p\}$.
+\end{defn}
+Note that an APGARCH process captures the leverage effect when $\gamma_{i}>0$ for all $i$. Also, it is evident that the constraints of the coefficients in \eqref{eq:defn-aparch2} ensure that $(\sigma_{t})_{t\in\Z}$ is positive for any APGARCH process. For a detailed discussion about estimation and a stationarity study of APGARCH processes, the interested reader is referred to \ref{} and \ref{}. %%GM&10.1.1.471.7587
+
+An APGARCH process contains several other GARCH type models as special cases. For instance, an APGARCH process corresponds to a GARCH process when $d=2$ and $\gamma_{i}=0$ for all $i$. When $d=1$, an APGARCH process corresponds to a TGARCH process with $\alpha_{i^{+}}\coloneqq\alpha_{i}(1-\gamma_{i})$ and $\alpha_{i^{-}}\coloneqq\alpha_{i}(1+\gamma_{i})$. When $d=2$, an APGARCH process corresponds to a GJR-GARCH process. To see this, first consider $\gamma_{i}\in[0,1)$ for all $i$, then:
+\begin{align*}
+    \sigma_{t}^{2}&=\omega+\sum_{i=1}^{q}\alpha_{i}(\abs{X_{t-i}}-\gamma_{i}X_{t-i})^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2}\\
+    &=\omega+\sum_{i=1}^{q}\alpha_{i}(1-\gamma_{i})^{2}X_{t-i}^{2}+\alpha_{i}\left((1+\gamma_{i})^{2}-(1-\gamma_{i})^{2}\right)\mathbbm{1}_{\{X_{t-i}<0\}}X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2}\\
+    &=\omega+\sum_{i=1}^{q}(\alpha_{i}^{*}+\gamma_{i}^{*}\mathbbm{1}_{\{X_{t-i}<0\}})X_{t-i}^{2}+\sum_{j=1}^{p}\beta_{j}\sigma_{t-j}^{2},
+\end{align*}
+where $\alpha_{i}^{*}\coloneqq\alpha_{i}(1-\gamma_{i})^{2}$ and $\gamma_{i}^{*}=\alpha_{i}\left((1+\gamma_{i})^{2}-(1-\gamma_{i})^{2}\right)=4\alpha_{i}\gamma_{i}$. This is evidently a GJR-GARCH process. Analogous, for $\gamma_{i}\in(-1,0)$, where instead $\alpha_{i}^{*}\coloneqq\alpha_{i}(1+\gamma_{i})^{2}$ and $\gamma_{i}^{*}\coloneqq\alpha_{i}\left((1-\gamma_{i})^{2}-(1+\gamma_{i})^{2}\right)=-4\alpha_{i}\gamma_{i}$. For other special cases of APGARCH processes, the interested reader is referred to \ref{}. %10.1.1.471.7587
+
+%To illustrate how all these different GARCH type models reproduce the leverage effect the so-called news impact curve is used, which describes the relation between $\sigma_{t}$ and $X_{t-1}$. Table \ref{} summarizes the expressions defining the news impact curves of the GARCH type models discussed above. Figure \ref{} ...
+
+%\begin{table}[H]
+%\centering
+%\begin{tabular}{l|l}
+%\hline
+%                          &  \\
+%$\mathrm{GARCH}(1,1)$     &  \\
+%                          &  \\ \hline
+%                          &  \\
+%$\mathrm{EGARCH}(1,1)$    &  \\
+%                          &  \\ \hline
+%                          &  \\
+%$\mathrm{TGARCH}(1,1)$    &  \\
+%                          &  \\ \hline
+%                          &  \\
+%$\mathrm{GJR-GARCH}(1,1)$ &  \\
+%                          &  \\ \hline
+%                          &  \\
+%$\mathrm{APGARCH}(1,1)$   &  \\
+%                          &  \\ \hline
+%\end{tabular}
+%\caption{test}
+%\label{tab:my-table}
+%\end{table}
+
+%\begin{table}[]
+%\centering
+%\begin{tabular}{l|l|l}
+%\multicolumn{1}{c|}{$\mathrm{GARCH}(1,1)$} & $\mathrm{EGARCH}(1,1)$ & $\mathrm{TGARCH}(1,1)$ \\ \hline
+%\multicolumn{1}{c|}{}                      &                        &                        \\
+%                                           &                        &                        \\
+%                                           &                        &                        \\ \hline
+%                                           &                        &                        \\ \hline
+%                                           &                        &                        \\
+%                                           &                        &                        \\
+%                                           &                        &                       
+%\end{tabular}
+%\caption{test}
+%\label{tab:my-table}
+%\end{table}
+
+\subsection{Non-Gaussian Error Distributions}\label{ss:ng}
+%nelson1991 %check LNonGM
+To better capture the leptokurticity of financial time series, it may be advantageous to consider alternative error distributions that have fatter tails relative to that of a normal distribution. Two common fat-tailed error distributions are discussed below.
+
+Suppose that $X=(X_{t})_{t\in\Z}$ is a GARCH process driven by $Z=(Z_{t})_{t\in\Z}$. First, it can be assumed that $Z$ follows an independent Student's $t$-distribution with $\nu>0$ degrees of freedom and scale parameter $s$. Then the density function of $Z$ is given by:
+%\begin{equation*}
+%    f(Z_{t})=\frac{\Gamma\left((\nu+1)/2\right)}{(\pi\nu)^{1/2}\Gamma(\nu/2)}\frac{s^{-1/2}}{\left(1+Z_{t}^{2}/(s\nu)\right)^{(\nu+1)/2}},
+%\end{equation*}
+\begin{equation*}
+    f(Z_{t})=\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{(\pi\nu)^{1/2}\Gamma\left(\frac{\nu}{2}\right)}\frac{s^{-1/2}}{\left(1+\frac{Z_{t}^{2}}{s\nu}\right)^{(\nu+1)/2}},\quad t\in \Z,
+\end{equation*}
+where $\Gamma(\cdot)$ denotes the Gamma function. The variance of $Z_{t}$ is given by:
+\begin{equation*}
+    \mathrm{Var}(Z_{t})=\frac{s\nu}{\nu-2}
+\end{equation*}
+So, to ensure that the unconditional variance of $Z_{t}$ exists and is equal to one, it is required that $\nu>2$ and $s=(\nu-2)/\nu$. A GARCH process $X$ driven by $Z$ that follows an independent Student's $t$-distribution, as described above, is henceforth called a Student GARCH process.
+
+Alternatively, it can be assumed that $Z$ follows an independent generalized error distribution (GED) with mean zero and unit variance. Then the density function of $Z$ is:
+\begin{equation*}
+    f(Z_{t})=\frac{\nu\exp\left(-\frac{1}{2}\absscale{\frac{Z_{t}}{\lambda}}^{\nu}\right)}{\lambda 2^{(\nu+1)/\nu}\Gamma\left(\frac{1}{\nu}\right)},\quad \lambda\coloneqq\left(\frac{2^{(-2/\nu)}\Gamma\left(\frac{1}{\nu}\right)}{\Gamma\left(\frac{3}{\nu}\right)}\right)^{1/2},
+\end{equation*}
+where $\nu>0$ is a parameter governing the tail-thickness. When $\nu=2$ the above density function evidently reduces to the standard normal density function. When $\nu<2$ the distribution of $Z$ has fatter tails than a standard normal distribution, and vice verse when $\nu>2$.
+%To see the former, consider $\nu=1$, then the above density function reduces to the density function of a Laplace distribution given by:
+%\begin{equation*}
+%    f(Z_{t})%=\frac{1}{\sqrt{2}}\exp(-\sqrt{2}\abs{Z_{t}})
+%    =2^{-1/2}\exp\left(-2^{1/2}\abs{Z_{t}}\right).
+%\end{equation*}
+%This is reminiscent of the density function for a standard normal distribution
+A GARCH process $X$ driven by $Z$ that follows an independent GED is henceforth called a GED GARCH process. 
+
+Lastly, note that the log-likelihood function for a Student or GED GARCH process can easily be constructed analoguos to \eqref{eq:normal-tth-log-like} using the respective density functions above.
+%Lastly, note that under the setup of Subsection \ref{ss:estimation-garch}, the log-likelihood function for the $t$-th observation of a Student or GED GARCH process can per \eqref{eq:tth-log-like} easily be constructed using the respective density functions above.
+
+%\newpage
+\subsection{Long Memory}
+Conventional time series models like ARMA and ARIMA processes, along with GARCH processes, all exhibit the short memory property meaning that the autocovariances are absolutely summable. Conversely, a process $(X_{t})_{t\in\Z}$ is said to have long memory, if it is weakly stationary and satisfies:
+\begin{equation}
+    \lim_{n\to\infty}\frac{|\textrm{Cov}(X_{t},X_{t-h})|}{Kh^{2d-1}}=1,
+\end{equation}
+where $d\in (0,1/2)$ and $K$ is a non-zero constant. In other words, the covariances $\gamma_{X}(h)=\textrm{Cov}(X_{t},X_{t-h})$ decrease too slowly as $h\to \infty$ to be absolutely summable, i.e.:
+\begin{equation}
+    \sum_{h=-\infty}^{\infty}|\textrm{Cov}(X_{t},X_{t-h})|=\infty.
+\end{equation}
+Before formally defining the concept of a FIGARCH process, which is a GARCH process that exhibits long memory, we recall the fractionary difference operator:
+\begin{equation}
+    (1-B)^{d}=1+\sum_{j=1}^{\infty}\frac{\Gamma(j-d)}{\Gamma(-d)j!}B^{j}, \quad d>-1,
+\end{equation}
+where $\Gamma(\cdot)$ denotes the Gamma function.
+%the gamma function $\Gamma: (0,\infty)\to (0,\infty)$ is defined as:
+%\begin{equation}
+%    \Gamma(\lambda)=\int_{0}^{\infty}x^{\lambda-1}e^{-x}\, \textrm{d}x.
+%\end{equation}
+Furthermore, we also recall from \eqref{eq:garch-arma} that $X_{t}^{2}$ is an ARMA$(m,p)$ process:
+\begin{align}
+    X_{t}^{2}& =\omega + \sum_{i=1}^{m}(\alpha_{i}+\beta_{i})X_{t-i}^{2}-\sum_{j=1}^{p}\beta_{j}V_{t-j}+V_{t}\\
+    & = \omega + \left(\alpha(B)+\beta(B)\right)X_{t}^{2}+ \left(1-\beta(B)\right)V_{t},
+\end{align}
+where $m=\max\{p,q\}$, $\alpha(B)\coloneqq \sum_{i=1}^{m}\alpha_{i}B^{i}$, and $\beta(B)\coloneqq \sum_{i=1}^{m}\beta_{i}B^{i}$ with $\alpha_{i}\coloneqq 0$ for $i>p$ and $\beta_{i}\coloneqq 0$ for $i>q$. Using the above facts, we can make the following definition: 
+\begin{defn}[\textit{Fractionally Integrated GARCH Process}]
+Let $(p,q)\in \N_{0}^{2}$, $d\in (0,1)$, and $Z=(Z_{t})_{t\in\Z}\sim \textrm{IID}(0,1)$. A stochastic process $X=(X_{t})_{t\in\Z}$ is called a $\mathrm{FIGARCH}(p,d,q)$ process (driven by $Z$) iff for all $t\in\Z$, it holds that:
+\begin{subequations}
+\begin{align}
+    X_{t}& =\sigma_{t}Z_{t},\\
+    (1-B)^{d}X_{t}^{2}&=\omega+\left(\alpha(B)+\beta(B)\right)(1-B)^{d}X_{t}^{2}-\left(1-\beta(B)\right)V_{t}.
+\end{align}
+\end{subequations}
+\end{defn}
+%\begin{defn}[Fractionally Integrated GARCH process]
+%Let $(p,q)\in \N_{0}^{2}$,  $d\in (0,1)$, and $Z=(Z_{t})_{t\in\Z}\sim\mathrm{IID}(0,1)$. A stochastic process $X=(X_{t})_{t\in\Z}$ is called a $\mathrm{FIGARCH}(p,d,q)$ iff for all $t\in\Z$, it holds that:
+%\begin{subequations}
+%\begin{align}
+%    X_{t}& =\sigma_{t}\eta_{t},\\
+%    \sigma_{t}^{2}&=\phi_{0}+\left(1+(1-B)^{d}\frac{\theta(B)}{\psi(B)}\right)X_{t-i}^{2},
+%\end{align}
+%\end{subequations}
+%where $\psi$ and $\theta$ are polynomials of degrees $p$ and $q$ respectively such that $\psi(0)=\theta(0)=1$. Additionally, the roots of $\psi$ all have moduli greater than $1$ and $\phi_{0} > 0$.
+%\end{defn}
+

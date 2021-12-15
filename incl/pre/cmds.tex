@@ -13,17 +13,70 @@
 \newcommand{\bigO}{\mathcal{O}}      % big O
 \renewcommand{\vec}[1]{\bm{#1}}      % bold vector style
 
+%%
+\renewcommand\qedsymbol{$\blacksquare$}                       % tombstone symbol as q.e.d
+
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}                   % absolute value
+\newcommand\absscale[1]{\left\lvert#1\right\rvert}            % absolute value with adjusting size
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}                  % norm
+\newcommand\normscale[1]{\left\lVert#1\right\rVert}           % norm with adjusting size
+\DeclarePairedDelimiterX{\inp}[2]{\langle}{\rangle}{#1, #2}   % inner product
+
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}               % standard mathcal font
+
+%fix for spacing around adjusted parentheses left
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+%%
+
+\def\code#1{\texttt{#1}}
+
 % Theorem enviroments ----------------------------------------------------------
 % http://www.ctex.org/documents/packages/math/amsthdoc.pdf
-\theoremstyle{plain}                 % Bold title, italic body text
+
+%%
+\newtheoremstyle{break}% name
+  {}%         Space above, empty = `usual value'
+  {}%         Space below
+  {}% Body font
+  {}%         Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font
+  {.}%        Punctuation after thm head
+  {\newline}% Space after thm head: \newline = linebreak
+  {}%         Thm head spec
+
+\theoremstyle{break}
 \newtheorem{thm}{Theorem}[chapter]   % Theorems, numbered by chapter
 \newtheorem{lem}[thm]{Lemma}         % Lemmas, numbered like theorems
 \newtheorem{prop}[thm]{Proposition}  % Propositions, numbered like theorems
-\newtheorem*{cor}{Corollary}         % Corollaries, unnumbered
+\newtheorem{cor}[thm]{Corollary}         % Corollaries, numbered like theorems
 
-\theoremstyle{definition}            % Bold title, upright body text
 \newtheorem{defn}[thm]{Definition}   % Definitions, numbered like theorems
 \newtheorem{exmp}[thm]{Example}      % Examples, numbered like theorems
+
+\newtheorem*{remark}{Remark}         % Remarks, unnumbered
+%%
+
+%\theoremstyle{plain}                 % Bold title, italic body text
+
+%\theoremstyle{definition}            % Bold title, upright body text
+%\newtheorem{thm}{Theorem}[chapter]   % Theorems, numbered by chapter
+%\newtheorem{lem}[thm]{Lemma}         % Lemmas, numbered like theorems
+%\newtheorem{prop}[thm]{Proposition}  % Propositions, numbered like theorems
+%\newtheorem*{cor}{Corollary}         % Corollaries, unnumbered
+
+%\newtheorem{defn}[thm]{Definition}   % Definitions, numbered like theorems
+%\newtheorem{exmp}[thm]{Example}      % Examples, numbered like theorems
+
+%\newtheorem*{remark}{Remark}
 
 % Figure commands --------------------------------------------------------------
 

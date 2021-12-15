@@ -1,0 +1,138 @@
+\section{Diagnostics}
+For this section, let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\Z$, denote a sample from a stochastic process $X=(X_{t})_{t\in\Z}$. Assume that $X$ follows some GARCH process of order $(p,q)\in\N_{0}^{2}$ driven by $Z=(Z_{t})_{t\in\Z}$. Define the stochastic process of standardized residuals $\tilde{X}=(\tilde{X}_{t})_{t\in\Z}$ as:
+\begin{equation}\label{eq:defn-stdresid}
+    \tilde{X}_{t}\coloneqq\frac{X_{t}}{\sigma_{t}},\quad t\in\Z.
+\end{equation}
+Note that in practice, these standardized residuals are computed using the fitted values from the estimated GARCH model.
+
+\subsection{Testing for Correlated Residuals}
+%GM, %HFTS4, %WeightedPortTest
+%For the this subsection, let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\Z$, denote a sample from a stochastic process $X=(X_{t})_{t\in\Z}$. Assume that $X$ follows some GARCH process driven by $Z=(Z_{t})_{t\in\Z}$.
+Theoretically, the process $\tilde{X}$ is equal to the process $Z$. Now, since $Z$ is an independent and identically distributed process, then so should $\tilde{X}$ be. However, in practice, $\tilde{X}$ merely estimates $Z$, but despite this it should still hold that $\tilde{X}$ is an independent and identically distributed process given that the proposed GARCH model adequately describes the underlying process $X$. To test this fact, a statistical hypothesis testing procedure known as the Ljung-Box test may be used. This procedure tests the following null hypothesis:
+\begin{equation}\label{eq:lb-null}
+    \mathcal{H}_{0}: \textrm{The standardized residuals $\tilde{X}$ are independently distributed}.
+\end{equation}
+The alternative hypothesis is evidently that the standardized residuals are not independently distributed implying serial correlation. Notice here that serial correlation indicates that the proposed GARCH model inadequately describes the underlying process $X$. To test this null hypothesis, the following Q-test statistic based on the sample $X_{\leq T}$ is used:
+\begin{equation}\label{eq:lb-qts}
+    Q_{T}(h)\coloneqq T(T+2)\sum_{j=1}^{h}\frac{\hat{\rho}_{\tilde{X}}(j)}{T-j},
+\end{equation}
+where $\hat{\rho}_{\tilde{X}}:(-T,T)\to[-1,1]$ is the sample autocorrelation based on $\tilde{X}$ defined as:
+\begin{equation*}
+    \hat{\rho}_{\tilde{X}}(j)\coloneqq\frac{\sum_{t=1}^{T-\abs{j}}\left(\tilde{X}_{t+\abs{j}}-\bar{\tilde{X}}_{T}\right)\left(\tilde{X}_{t}-\bar{\tilde{X}}_{T}\right)}{\sum_{t=1}^{T}\left(\tilde{X}_{t}-\bar{\tilde{X}}_{T}\right)^{2}},\quad \bar{\tilde{X}}\coloneqq\frac{1}{T}\sum_{t=1}^{T}\tilde{X}_{t}.
+\end{equation*}
+Although, it is beyond the scope of this project report, it can be argued that \eqref{eq:lb-qts} is asymptotically chi-squared distributed with $h$ degrees of freedom under the null hypothesis \eqref{eq:lb-null}, that is:
+\begin{equation*}
+    Q(h)\overset{d}{\to}\chi^{2}(h)\quad\textrm{as}\quad T\to\infty.
+\end{equation*}
+For details about this fact, the interested reader is referred to \ref{} and \ref{}. %ljung1978 %sacf4
+%\begin{prop}
+%Assume that certain regularity conditions hold. Then under the null hypothesis of \eqref{eq:lb-null}:
+%\begin{equation*}
+%    Q(h)\overset{d}{\to}\chi^{2}(h)\quad\textrm{as}\quad T\to\infty.
+%\end{equation*}
+%\end{prop}
+%The interested reader is referred to \ref{} and \ref{} for a discussion about this asymptotic distribution. %ljung1978 %sacf4
+Consequently, the null hypothesis \eqref{eq:lb-null} is rejected at a given choice of significance level $a\in(0,1)$, if the observed Q-statistic is in the following critical region:
+\begin{equation}\label{eq:lb-crit}
+    \mathcal{K}\coloneqq\left\{\left(F_{\chi_{h}^{2}}^{-1}(1-a),\infty\right)\right\}
+\end{equation}
+where $F_{\chi_{h}^{2}}^{-1}:[0,1]\to\R$ denotes the quantile function of a chi-squared distribution with $h$ degrees of freedom. Notice that the critical region above constitutes a right-sided test.
+
+Please note that an analogous testing procedure can be made for $Q$-statistics using autocorrelations based on squared standardized residuals $\tilde{X}^{2}$. Likewise, a procedure can be made prior to fitting a GARCH model to test whether or not a stochastic process of returns is significantly correlated. \textcolor{red}{The former is of interest since ...} The latter is evidently of interest since no significant autocorrelation ought to be found in the returns process according to the previously discussed stylized facts.
+
+A more sophisticated procedure implementing a weighted $Q$-statistic, the details of which are beyond the scope of this project report, is provided in \ref{}. %WeightedPortTest
+This weighted approach is shown to have superior statistical power over the classical approach described above. Here statistical power refers to the probability of correctly rejecting the null hypothesis. %that is, rejecting the null hypothesis when it indeed is false.
+
+
+
+%\newpage
+%A more sophisticated alternative to \eqref{eq:lb-qts} is a weighted Q-statistic given by:
+%\begin{equation}\label{eq:lb-wqts}
+%    Q^{w}(h)\coloneqq T(T+2)\sum_{j=1}^{h}\frac{(h-j+1)}{h}\frac{\hat{\rho}_{\tilde{X}}(j)}{T-j}.
+%\end{equation}
+%Note that the first term in the sum above is given a weight equal to one and the last term is given a weight equal to $1/h$.
+%\begin{prop}\label{eq:asdjklasjdklasd}
+%Assume who knows what. Then under the null hypothesis \eqref{eq:lb-null}:
+%\begin{equation*}
+%    Q^{w}(h)\overset{d}{\to}\sum_{j=1}^{h}w_{j}\chi_{j}^{2}(1)\quad\textrm{as}\quad T\to\infty.
+%\end{equation*}
+%\end{prop}
+%The proof of this result is beyond the scope of this project report. The interested reader is referred to \ref{}. For details about the asymptotic distribution and how it should be approximated in practice, the reader is again referred to \ref{}.
+%\textcolor{red}{Consequently, the null hypothesis \eqref{eq:lb-null} is rejected a given choice of significance level $a\in(0,1)$, if the observed weighted Q-statistic \eqref{eq:lb-wqts} is in the following critical region:
+%\begin{equation*}
+%    \mathcal{K}\coloneqq\left\{(F_{w}^{-1}(1-a),\infty)\right\},
+%\end{equation*}
+%where $F_{w}^{-1}:[0,1]\to\R$ denotes the quantile function of the asymptotic distribution provided above in Proposition \ref{eq:asdjklasjdklasd}}.
+
+%\textcolor{blue}{Please note that analogous tests can be made for a weighted Q-statistic using autocorrelations based on squared residuals $\tilde{X}^{2}$. Likewise, for $X$...}
+
+%\newpage
+\subsection{Testing for GARCH Effects}
+%For this subsection, let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\Z$, denote a sample from a stochastic process $X=(X_{t})_{t\in\Z}$. Assume that $X$ follows some GARCH process of order $(p,q)\in\N_{0}^{2}$ driven by $Z=(Z_{t})_{t\in\Z}$. 
+For the subsection, assume that $X$ follows some GARCH process of order $(p,q)\in\N_{0}^{2}$ with $p=0$. More on this assumption shortly. Then, the following Lagrange Multiplier (LM) statistical hypothesis testing procedure for determining the presence of GARCH effects may be used. The null hypothesis, being that there are no GARCH effects present, is then evidently given by:
+\begin{equation}\label{eq:lm-null}
+    \mathcal{H}_{0}:\alpha_{j}=0,\quad\forall j\in\{1,\dots,q\}.
+\end{equation}
+To test this null hypothesis, the following test statistic based on the sample $X_{\leq T}$ is used:
+\begin{equation}\label{eq:lm-ts}
+    \mathrm{LM}\coloneqq T R^{2},
+\end{equation}
+where $R^{2}$ is the coefficient of determination of the following auxiliary regression:
+\begin{equation}\label{eq:sadjaskjdhkjasdhjkasd}
+    X_{t}^{2}=\omega+\alpha_{1}X_{t-1}^{2}+\dots+\alpha_{q}X_{t-q}^{2}+V_{t},\quad V_{t}\coloneqq X_{t}^{2}-\sigma_{t}^{2}.
+\end{equation}
+Note that \eqref{eq:sadjaskjdhkjasdhjkasd} is derived analogous to \eqref{eq:garch-arma}. Although, the proof is omitted from this project report, it holds that \eqref{eq:lm-ts} is asymptotically chi-squared distributed with $q$ degrees of freedom under the null hypothesis \eqref{eq:lm-null}, that is:
+\begin{equation*}
+    \mathrm{LM}\overset{d}{\to}\chi^{2}(q)\quad\textrm{as}\quad T\to\infty.
+\end{equation*}
+For a proof of this result, the interested reader is referred to \ref{}. %GM
+%\begin{prop}
+%Assume certain regularity conditions hold. Then under the null hypothesis \eqref{eq:lm-null}:
+%\begin{equation*}
+%    \mathrm{LM}\overset{d}{\to}\chi^{2}(q)\quad\textrm{as}\quad T\to\infty.
+%\end{equation*}
+%\end{prop}
+%The proof of this result is omitted from this project report. The interested reader is referred to \ref{}. %GM
+Consequently, the null hypothesis \eqref{eq:lm-null} is rejected at a given choice of significance level $a\in(0,1)$, if the observed LM test statistic is in a critical region analogous to \eqref{eq:lb-crit} with instead the chi-squared distribution having $q$ degrees of freedom.
+
+Notice that in practice this LM testing procedure is conducted for various values of $q$ prior to fitting a GARCH model. Now, after fitting a GARCH model, an analogous test can be made by instead using the squared standardized residuals $\tilde{X}^{2}$ in \eqref{eq:sadjaskjdhkjasdhjkasd}. Then, the null hypothesis being accepted signifies that the fitted GARCH model resulted in adequate removal of the GARCH effects.
+
+Moreover, the initial assumption that $p=0$ in the LM test described above, can be relaxed since it is shown in \ref{} that an equivalent LM test can be derived for $p\neq0$.%lee1991
+
+Lastly, a procedure of superior statistical power based on a weighted LM test statistic is again provided in \ref{}.%WeightedPortTest
+
+%\newpage
+%\subsection{Testing for Asymmetric Effects on Volatility}
+%%Engle&NG1993 %LNonGM &hastef0163 %rugarch ...%jmf_2017051916361813
+
+%%For this subsection, let $X_{\leq T}=(X_{t})_{t=1}^{T}$, $T\in\Z$, denote a sample from a stochastic process $X=(X_{t})_{t\in\Z}$. Assume that $X$ follows some GARCH process driven by $Z=(Z_{t})_{t\in\Z}$. 
+%This subsection introduces a statistical hypothesis testing procedure for uncovering possible asymmetric effects on the (\textcolor{red}{conditional}) volatility. The testing procedure is based on the following auxiliary regression:%\textcolor{red}{
+%%\begin{equation}
+%%    \tilde{X}_{t}^{2}=a+b\psi_{t-1}+c^{\top}\left(\frac{1}{\sigma_{t}^{2}}\frac{\partial\sigma_{t}^{2}}{\partial\theta}\right)+\xi_{t},
+%%\end{equation}
+%%where $\tilde{X}_{t}$ is the standardized residuals as in \eqref{eq:defn-stdresid}, $a,b\in\R$ as well as $c\in\R^{3}$ are parameters, $\theta\in\R^{3}$ is the parameter vector of the concerned GARCH process, and $\xi_{t}$ is the residual.}
+%\begin{equation}
+%    \tilde{X}_{t}^{2}=a+b\psi_{t-1}+u_{t}
+%\end{equation}
+%%where $\tilde{X}_{t}$ is the standardized residuals as in \eqref{eq:defn-stdresid}, 
+%where $a,b\in\R$ are parameters, \textcolor{red}{and $u_{t}$ is the residual}. Setting $\psi_{t-1}=\mathbbm{1}_{\{X_{t-1}<0\}}$ constitutes a so-called sign bias test. Alternatively, setting $\psi_{t-1}=\mathbbm{1}_{\{X_{t-1}<0\}}\tilde{X}_{t-1}$ constitutes a negative sign bias test, and vice versa, setting $\psi_{t-1}=\mathbbm{1}_{\{X_{t-1}>0\}}\tilde{X}_{t-1}$ constitutes a positive sign bias test. The null hypothesis, being that no asymmetric effects are present on the (\textcolor{red}{conditional}) volatility, is then given by:
+%\begin{equation}\label{eq:sb-null}
+%    \mathcal{H}_{0}:b=0.
+%\end{equation}
+%This null hypothesis is tested using the $t$-ratio for the estimate of the parameter $b$. Recall that a $t$-ratio asymptotically follows a standard normal distribution under the null hypothesis. 
+
+%A joint sign bias test can be conducted based on the following auxiliary regression:
+%\begin{equation}\label{eq:ar-sb-joint}
+%    \tilde{X}_{t-1}^{2}=a+b_{1}\mathbbm{1}_{\{X_{t-1}<0\}}+b_{2}\mathbbm{1}_{\{X_{t-1}<0\}}\tilde{X}_{t-1}+b_{3}\mathbbm{1}_{\{X_{t-1}>0\}}\tilde{X}_{t-1}+u_{t}.
+%\end{equation}
+%The null hypothesis is then evidently given by:
+%\begin{equation}\label{eq:sb-joint-null}
+%    \mathcal{H}_{0}:b_{1}=b_{2}=b_{3}=0.
+%\end{equation}
+%To test this null hypothesis an LM test statistic, analogous to \eqref{eq:lm-ts} with instead $R^{2}$ being the coefficient of determination of \eqref{eq:ar-sb-joint}, is used. This LM test statistic asymptotically follows a chi-squared distribution \textcolor{red}{with three degrees of freedom} under the null hypothesis.
+
+%Note that analogous testing procedures can be conducted prior to fitting a GARCH model to explore the nature of the time-varying volatility in some stochastic process of returns. For details about this procedure, the interested reader is referred to \ref{}.%engle&ng1993
+
+%\newpage
+%\subsection{Testing for Long Memory}
+

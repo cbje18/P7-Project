@@ -1,0 +1,187 @@
+\section{Fundamental Definitions}
+This section is based on 123...
+
+\begin{defn}[\textit{Measurable Map, Random Element, Random Variable}]
+Let $(\Omega,\mathcal{F})$ and $(\Gamma,\mathcal{G})$ be two measurable spaces. Then any map $f:\Omega\to\Gamma$ is said to be $\mathcal{F}$-$\mathcal{G}$-measurable iff $f^{-1}(E)\in\mathcal{F}$ for all $E\in\mathcal{G}$. If there is a probability measure on $(\Omega,\mathcal{F})$ present in the discussion, then any $\mathcal{F}$-$\mathcal{G}$-measurable map is called a random element and every real valued $\mathcal{F}$-$\mathcal{B}(\R)$-measurable map is called a random variable.
+\end{defn}
+Note that a map will simply be referred to as measurable if the concerned $\sigma$-algebras are clear from the context.
+
+%A convenient property of measurable maps is introduced below.
+%\begin{prop}\label{prop:fdr1}
+%Let $(\Omega,\mathcal{F})$ and $(\R,\mathcal{B}(\R))$ be two measurable spaces. Assume that $f:\Omega\to\R$ is measurable, and that $g:\R\to\R$ is continuous. Then $g\circ f:\Omega\to\R$ is a measurable map. 
+%\end{prop}
+%The proof of this assertion is omitted since it follows from more general results. The interested reader is referred to the references listed at the beginning of this section.
+
+%\begin{prop}\label{prop:fdr1}
+%Let $(\Omega,\mathcal{F})$ be a measurable space, and let $(\Sigma,d_{\Sigma})$ and $(\Upsilon,d_{\Upsilon})$ be two metric spaces. Assume that $f:\Omega\to\Sigma$ is $\mathcal{F}$-$\mathcal{B}(\Sigma)$-measurable, and that $g:\Sigma\to\Upsilon$ is continuous. Then $g\circ f:\Omega\to\Upsilon$ is $\mathcal{F}$-$\mathcal{B}(\Upsilon)$-measurable.
+%\end{prop}
+%\begin{proof}
+%\end{proof}
+%As per the next result, linear combinations and products of measurable functions are again measurable.
+%\begin{prop}\label{eq:fdr3}
+%Let $(\Omega,\mathcal{F})$ be a measurable space. Assume that $f_{i}:\Omega\to\R$ is $\mathcal{F}$-$\mathcal{B}(\R)$-measurable for every $i\in\{1,\dots,n\}$ with $n\in\N$, and that $P:\R^{n}\to\R$ is some polynomial. Then the map $g:\Omega\to\R$ defined by:
+%\begin{equation}
+%    g(\omega)\coloneqq P(f_{1}(\omega),\dots,f_{n}(\omega)),\quad\omega\in\Omega,
+%\end{equation}
+%is $\mathcal{F}$-$\mathcal{B}(\R)$-measurable.
+%\end{prop}
+%\begin{proof}
+%\end{proof}
+
+%\begin{prop}
+%Let $(\Omega,\mathcal{F})$, $(\Gamma,\mathcal{G})$, and $(\Sigma,\mathcal{Q})$ be three measurable spaces. Assume that $f:\Omega\to\Gamma$ is $\mathcal{F}$-$\mathcal{G}$-measurable, and that $g:\Gamma\to\Sigma$ is $\mathcal{G}$-$\mathcal{Q}$-measurable. Then $g\circ f:\Omega\to\Sigma$ is $\mathcal{F}$-$\mathcal{Q}$-measurable. Moreover 
+%\end{prop}
+%\begin{proof}
+%Let $A\in\mathcal{Q}$. Then it immediately follows from the the measurability of $g$ and $f$ that:
+%\begin{equation*}
+%    (g\circ f)^{-1}(A)=f^{-1}(g^{-1}(A))\in\mathcal{F}.\qedhere
+%\end{equation*}
+%\end{proof}
+
+\begin{defn}[\textit{Stochastic Process}]
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, $(\Gamma,\mathcal{G})$ a measurable space, and $I\subseteq\R$ be non-empty. Then a family $X=(X_{t})_{t\in I}$ of random elements $X_{t}:\Omega\to\Gamma$ is called a stochastic process on $(\Omega,\mathcal{F},\mathbb{P})$ with target space $(\Gamma,\mathcal{G})$ and index set $I$. %If $I$ is countable, then $X$ is called discrete.
+\end{defn}
+Note that, in this project report, it is henceforth assumed, unless specified otherwise, that any stochastic process is defined on a probability space $(\Omega,\mathcal{F},\mathbb{P})$  with target space $(\R,\mathcal{B}(\R))$ and index set $\Z$. The term time series is often used synonymously for a stochastic process of the aforementioned form.
+\begin{defn}[\textit{Path Map, Sample Path}]\label{defn:pmsm}
+Let $X=(X_{t})_{t\in I}$ be a stochastic process on the probability space $(\Omega,\mathcal{F},\mathbb{P})$ with target space $(\Gamma,\mathcal{G})$. Then the path map $X_{\bullet}:\Omega\to\Gamma^{I}$ associated with $X$ is defined as:
+\begin{equation}
+    (X_{\bullet}(\omega))(t)\coloneqq X_{t}(\omega),\quad\omega\in\Omega,\, t\in I.
+\end{equation}
+Moreover, the image point $X_{\bullet}(\omega)\in\Gamma^{I}$ is called the sample path corresponding to $\omega\in\Omega$.
+\end{defn}
+Note that in Definition \ref{defn:pmsm}, the notation $\Gamma^{I}$ denotes the set of all maps from $I$ to $\Gamma$.
+\begin{defn}[\textit{Filtration}]
+Let $(\Omega,\mathcal{F})$ be a measurable space. Then a family $(\mathcal{F}_{t})_{t\in\Z}$ of sub-$\sigma$-algebras of $\mathcal{F}$ such that $\mathcal{F}_{s}\subseteq\mathcal{F}_{t}\subseteq\mathcal{F}$ for all $s,t\in\Z$ with $s\leq t$ is called a filtration on $(\Omega,\mathcal{F})$. 
+\end{defn}
+\begin{defn}[\textit{Adapted Process}]
+Let $X=(X_{t})_{t\in\Z}$ be a stochastic process on the probability space $(\Omega,\mathcal{F},\mathbb{P})$ with target space $(\Gamma,\mathcal{G})$, and let $(\mathcal{F}_{t})_{t\in\Z}$ be a filtration on $(\Omega,\mathcal{F})$. Then $X$ is called adapted to $(\mathcal{F}_{t})_{t\in\Z}$ iff $X_{t}:\Omega\to\Gamma$ is $\mathcal{F}_{t}$-measurable for all $t\in\Z$.
+\end{defn}
+Note that a stochastic process will simply be referred to as adapted if the filtration is clear from the context.
+\begin{defn}[\textit{Natural Filtration}]\label{defn:naturalfiltration}
+Let $X=(X_{t})_{t\in\Z}$ be a stochastic process on the probability space $(\Omega,\mathcal{F},\mathbb{P})$ with target space $(\Gamma,\mathcal{G})$. Then the natural filtration associated with $X$ is defined as:
+\begin{equation}
+    \mathcal{F}_{t}^{X}\coloneqq\sigma\left(\left\{X_{s}^{-1}(E)\mid E\in\mathcal{G},\hspace{4pt} s\in(-\infty,t]\cap\Z\right\}\right),\quad t\in\Z.
+\end{equation}
+\end{defn}
+Note that a stochastic process is by definition adapted to its natural filtration.
+\begin{defn}[\textit{Independence}]\label{defn:ind}
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space. Then $\mathcal{M}_{1},\dots,\mathcal{M}_{n}\subseteq\mathcal{F}$ are called independent iff for every non-empty $J\subseteq\{1,\dots,n\}$ with $n\in\N$, it holds that:
+\begin{equation}
+    \mathbb{P}\left(\hspace{2pt}\bigcap\limits_{i\in J}A_{i}\right)=\prod_{i\in J}\mathbb{P}(A_{i}),\quad A_{i}\in\mathcal{M}_{i}.
+\end{equation}
+The events $A_{1},\dots,A_{n}\in\mathcal{F}$ are called independent iff $\{A_{1}\},\dots,\{A_{n}\}\subseteq\mathcal{F}$ are independent. Moreover, let $(\Gamma_{i},\mathcal{G}_{i})$ be measurable spaces, and let $X_{i}:\Omega\to\Gamma_{i}$ be random elements for every $i\in\{1,\dots,n\}$. Then $X_{1},\dots,X_{n}$ are called independent iff their induced $\sigma$-algebras, $\sigma(X_{1}),\dots,\sigma(X_{n})$, are independent.
+\end{defn}
+Note that in Definition \ref{defn:ind}, the $\sigma$-algebra induced by $X_{i}$ is defined as:
+\begin{equation}
+    \sigma(X_{i})\coloneqq X_{i}^{-1}(\mathcal{G}_{i})\coloneqq\{X_{i}^{-1}(E_{i})\mid E_{i}\in\mathcal{G}_{i}\}.
+\end{equation}
+%\begin{prop}\label{prop:fdr2}
+%Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, and let $(\Gamma_{i},\mathcal{G}_{i})$ and $(\Sigma_{i},\mathcal{Q}_{i})$ be measurable spaces for every $i\in\{1,\dots,n\}$ with $n\in\N$. Assume that $X_{i}:\Omega\to\Gamma_{i}$ are random elements, and that $F_{i}:\Omega_{i}\to\Sigma_{i}$ is a measurable map for every $i\in\{1,\dots,n\}$. If $X_{1},\dots,X_{n}$ are independent, then $F_{1}\circ X_{1},\dots,F_{n}\circ X_{n}$ are again independent.
+%\end{prop}
+%Note that the previous result can be generalized to hold for a composition of a continuous map with a random element, cf. Proposition \ref{prop:fdr1}.
+%\begin{proof}
+%This result immediately follows by noticing that the $\sigma$-algebra induced by $F_{i}\circ X_{i}$ is smaller than the $\sigma$-algebra induced by $X_{i}$ for every $i\in\{1,\dots,n\}$.
+%\end{proof}
+\begin{defn}[\textit{Independent Increments}]
+Let $X=(X_{t})_{t\in I}$ be a stochastic process on $(\Omega,\mathcal{F},\mathbb{P})$ with target space $(\R^{d},\mathcal{B}(\R^{d}))$. Then $X$ is said to be a process with independent increments iff its increments:
+\begin{equation}
+    X_{0},\quad X_{t_{1}}-X_{0},\quad\dots,\quad X_{t_{n}}-X_{t_{n-1}},
+\end{equation}
+are independent for all $n\in\N$ and $t_{1},\dots,t_{n}\in I$ with $0<t_{1}<\dots<t_{n}$.
+\end{defn}
+\begin{defn}[\textit{Expectation}]
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, and let $f:\Omega\to\R$ be $\mathbb{P}$-integrable function. Then the expectation of $f$ is defined as:
+\begin{equation}
+    \mathbb{E}[f]\coloneqq\int_{\Omega}f\,\mathrm{d}\mathbb{P}.
+\end{equation}
+\end{defn}
+\begin{defn}[\textit{Kurtosis, Leptokurticity}\textcolor{red}{*}]\label{defn:kurtosis}
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, and let $f:\Omega\to\R$ with $\mathbb{E}[f^{4}]<\infty$. Then the kurtosis of $f$ is defined as:
+\begin{equation}
+    \kappa(f)\coloneqq\frac{\mathbb{E}[(f-\mathbb{E}[f])^{4}]}{\left(\mathbb{E}\left[(f-\mathbb{E}[f])^{2}\right]\right)^{2}}.
+\end{equation}
+\end{defn}
+\begin{defn}[\textit{Conditional Expectation}]
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, $\mathcal{A}\subseteq\mathcal{F}$ a sub-$\sigma$-algebra, and $f:\Omega\to\R$ a $\mathbb{P}$-integrable function. Then a function $g:\Omega\to\R$ is called a representative of the conditional expectation of $f$ under the hypothesis $\mathcal{A}$ iff it is $\mathbb{P}$-integrable, $\mathcal{A}$-measurable, and:
+\begin{equation}
+    \int_{A}f\,\mathrm{d}\mathbb{P}=\int_{A}g\,\mathrm{d}\mathbb{P},\quad A\in\mathcal{A}.
+\end{equation}
+\end{defn}
+123123
+
+\begin{thm}
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, $\mathcal{A}\subseteq\mathcal{F}$ a sub-$\sigma$-algebra, and $f:\Omega\to\R$ a $\mathbb{P}$-integrable function. Then:
+\begin{enumerate}[label=(\roman*)]
+\item Linearity: Let $g:\Omega\to\R$ be $\mathbb{P}$-integrable, and let $\alpha,\beta\in\R$. Then:
+\begin{equation}\label{eq:celin}
+    \mathbb{E}[\alpha f +\beta g\mid\mathcal{A}]=\alpha\mathbb{E}[f\mid\mathcal{A}]+\beta\mathbb{E}[g\mid\mathcal{A}],\quad\textrm{$\mathbb{P}$-a.s.}
+\end{equation}
+\item Tower property: If $\mathcal{B}\subseteq\mathcal{F}$ is another sub-$\sigma$-algebra such that $\mathcal{A}\subseteq\mathcal{B}$, then:
+\begin{equation}\label{eq:cetp}
+    \mathbb{E}[\mathbb{E}[f\mid\mathcal{B}]\mid\mathcal{A}]=\mathbb{E}[\mathbb{E}[f\mid\mathcal{A}]\mid\mathcal{B}]=\mathbb{E}[f\mid\mathcal{A}],\quad\textrm{$\mathbb{P}$-a.s.}
+\end{equation}
+\item Pull-out property: Let $g:\Omega\to\R$ be $\mathcal{A}$-measurable. Then $fg$ is $\mathbb{P}$-integrable iff $g\mathbb{E}[f\mid\mathcal{A}]$ is $\mathbb{P}$-integrable, and:
+\begin{equation}\label{eq:cepop}
+    \mathbb{E}[fg\mid\mathcal{A}]=g\mathbb{E}[f\mid\mathcal{A}],\quad\textrm{$\mathbb{P}$-a.s.}
+\end{equation}
+\item If the $\sigma$-algebra induced by $f$ and $\mathcal{A}$ are independent, then
+\begin{equation}\label{eq:ceind}
+    \mathbb{E}[f\mid\mathcal{A}]=\mathbb{E}[f],\quad\textrm{$\mathbb{P}$-a.s.}
+\end{equation}
+\item Jensen's inequality: Let $\varphi:\R\to\R$ be convex, and assume that $\varphi\circ f:\Omega\to\R$ is $\mathbb{P}$-integrable. Then:
+\begin{equation}\label{eq:cejens}
+    \varphi\left(\mathbb{E}[f\mid\mathcal{A}]\right)\leq\mathbb{E}[\varphi(f)\mid\mathcal{A}],\quad\textrm{$\mathbb{P}$-a.s.}
+\end{equation}
+\end{enumerate}
+\end{thm}
+%For a proof the interested reader is referred to \ref{}.
+
+\begin{defn}[\textit{Cumulative Distribution Function}]
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, and let $t=(t_{1},\dots,t_{n})\in\Z^{n}$ for $n\in\N$ with $t_{1}<\dots<t_{n}$. Suppose that $X_{t}=(X_{t_{1}},\dots,X_{t_{n}}):\Omega\to\R_{n}$ is a random vector. Then the cumulative distribution function $F_{t}:\R^{n}\to[0,1]$ of $X_{t}$ is defined as:
+\begin{equation}
+    F_{t}(x)\coloneqq\mathbb{P}\left(\bigcap\limits_{i=1}^{n}\{\omega\in\Omega\mid X_{t_{i}}\leq x_{i}\}\right),\quad x=(x_{1},\dots,x_{n})\in\R^{n}.
+\end{equation}
+\end{defn}
+%In order to introduce the concept of strict stationarity, recall that if $t=(t_{1},t_{2},\dots,t_{n})\in\Z^{n}$ is an ordered tuple of integers, then the distribution function $F_{t}:\R^{n}\to [0,1]$ of a random vector $X_{t}=(X_{t_{1}},X_{t_{2}},\dots, X_{t_{n}}): (\Omega,\mathcal{F},\mathbb{P})\to (\R^{n},\mathcal{B}(\R^{n}))$ is then given by
+%\begin{equation}
+%    F_{t}(x)=\mathbb{P}\left(\bigcap_{i=1}^{n}\left\{\omega\in\Omega\mid X_{t_{i}}(\omega)\leq x_{i}\right\}\right),\quad x=(x_{1},x_{2},\dots,x_{n})\in\R^{n}.
+%\end{equation}
+\begin{defn}[\textit{Strict, Weak Stationarity}]
+Let $X=(X_{t})_{t\in\Z}$ be a stochastic process. Then $X$ is said to be strictly stationary iff: %for all $n\in\N$, $t_{1},\dots,t_{n}\in\Z$ with $t_{1}<\dots<t_{n}$, and $h\in\Z$, it holds that:
+\begin{equation}
+    F_{(t_{1},\dots,t_{n})}=F_{(t_{1+h},\dots,t_{n+h})},
+\end{equation}
+for all $n\in\N$, $t_{1},\dots,t_{n}\in\Z$ with $t_{1}<\dots<t_{n}$, and $h\in\Z$. Moreover, $X$ is said to be weakly stationary iff for all $t,s,h\in\Z$, it holds that:
+\begin{equation*}
+    \textrm{(i)}\hspace{6pt}\mathbb{E}[X_{t}^{2}]<\infty,\qquad\textrm{(ii)}\hspace{6pt}\mathbb{E}[X_{t}]=\mu,\qquad\textrm{(iii)}\hspace{6pt}\mathrm{Cov}(X_{t},X_{t+h})=\mathrm{Cov}(X_{0},X_{h}).
+\end{equation*}
+\end{defn}
+
+%\begin{defn}[\textit{Strict Stationarity}]
+%A \textcolor{red}{time series} $(X_{t})_{t\in\Z}$ is said to be strictly stationary if:
+%\begin{equation}
+%    F_{(t_{1},\dots,t_{n})}=F_{(t_{1+h},\dots,t_{n+h})},
+%\end{equation}
+%for all $n\in \N$, all $t_{1}<t_{2}<\dots <t_{n}$, where $t_{j}\in \Z$ for $j=1,\dots,n$, and all $h\in\Z$.
+%\end{defn}
+%\begin{defn}[\textit{Autocovariance, Autocorrelation Function}]
+%\end{defn}
+%\begin{defn}[\textit{Sample Autocovariance, Autocorrelation Function}]
+%\end{defn}
+%\begin{defn}[\textit{Weak Stationarity}]
+%A \textcolor{red}{time series} $(X_{t})_{t\in\Z}$ is said to be weakly stationary if 
+%\begin{enumerate}[label=(\roman*)]
+%    \item $\mathbb{E}[X_{t}^{2}]<\infty$,\hspace{8 pt} $\forall t\in\Z$,
+%    \item $\mathbb{E}[X_{t}]=m$,\hspace{8 pt} $\forall t\in \Z$,
+%    \item $\textrm{Cov}(X_{t},X_{t+h})=\textrm{Cov}(X_{0},X_{h})$, \hspace{8 pt} $\forall t,h \in \Z$.
+%\end{enumerate}
+%\end{defn}
+
+
+%\begin{defn}[\textit{Ergodic Process}]
+%A strictly stationary stochastic process $X=(X_{t})_{t\in\Z}$ is said to be ergodic iff for all Borel sets $B\in\mathcal{B}(\R)$ and $k\in\Z$, it holds that: %A strictly stationary \textcolor{red}{time series} $(X_{t})_{t\in\Z}$ is said to be ergodic if for all Borel sets $B\in\mathcal{B}(\R)$ and all $k\in\Z$
+%\begin{equation}
+%    n^{-1}\sum_{i=1}^{n}\ind_{B}(X_{i},X_{i+1},\dots,X_{i+k})\to \mathbb{P}\left(\{(Z_{1},\dots,Z_{1+k})\in B\}\right),\hspace{10 pt} \mathbb{P}\textrm{-a.s.}
+%\end{equation}
+%\end{defn}
+
