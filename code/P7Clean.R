@@ -9,8 +9,8 @@ require(tseries); require(ggplot2); require(rugarch)
 SP500 <- get.hist.quote("^GSPC", provider="yahoo"); head(SP500)
 SP500_logreturns <- diff(log(SP500$Close), lag=1)
 
-#Disregarding data before 03/01/2000
-SP500_logreturns <- SP500_logreturns[2275:length(SP500_logreturns)]
+#Disregarding log-returns before 03/01/2000 and after 13/12/2021
+SP500_logreturns <- window(SP500_logreturns, start="2000-01-03", end="2021-12-13")
 
 #### Stylized facts ####
 ## Plot of raw data
@@ -133,11 +133,12 @@ gmisfit <- function(tsdata,x,y,z,solver,out.sample){
 }
 
 # Setting input
-x1 <- c(3,3)
+x1 <- c(2,2)
 y1 <- list("sGARCH", "eGARCH", "TGARCH", "gjrGARCH", "apARCH", "AVGARCH", "fiGARCH"); y2 <- list("sGARCH")
 z1 <- list("norm", "std", "ged"); z2 <- list("norm")
 
-#Note that the 'out.sample = 156' corresponds leaving out all data after 30/04/2021
+#Note that the 'out.sample = 156' corresponds leaving out all data AFTER 30/04/2021
+SP500_logreturns[length(SP500_logreturns)-157]
 allgms <- gmisfit(SP500_logreturns, x1, y1, z1, solver="hybrid", out.sample=156)
 
 #### Model selection according to AIC, BIC, SIC, and HQIC ####
@@ -229,6 +230,8 @@ modelselect <- function(models,y,z){
 }
 
 ms <- modelselect(allgms, y1, z1)
+allms <- unlist(ms)
+uniquems <- allms[!duplicated(allms)]
 
 #Testing procedure above for one type of model with same distribution
 #Input: 'gm' is a list of one type of models with same distribution
@@ -263,7 +266,7 @@ insample1.test <- insample1(gm.test)[[1]]
 #'fitten' is one fitted model from 'ugarchfit'
 #'n.ahead' determines the forecast horizon
 #'sigma.out' if true only forecasted sigmas are returned
-hm.recursive.gmfit <- function(fitten, data, n.ahead, solver){
+recursivegmfit <- function(fitten, data, n.ahead, solver){
   if(fitten@model$modeldesc$vmodel!="fGARCH"){                #Not submodel
     modelS <- fitten@model$modeldesc$vmodel
     garchOrderS <- unname(c(fitten@model$modelinc["alpha"],fitten@model$modelinc["beta"]))
@@ -297,8 +300,8 @@ hm.recursive.gmfit <- function(fitten, data, n.ahead, solver){
   }  
   return(output)
 }
-homemadeugarchforecast.recursive <- function(fitten, data, n.ahead, solver, sigma.out=FALSE){
-  gm.rec <- hm.recursive.gmfit(fitten=fitten, data, n.ahead=n.ahead, solver=solver)
+recursiveforecast <- function(fitten, data, n.ahead, solver, sigma.out=FALSE){
+  gm.rec <- recursivegmfit(fitten=fitten, data, n.ahead=n.ahead, solver=solver)
   print("Finished recursive fitting")
   output <- list()
   for(i in 1:length(gm.rec)){
@@ -315,20 +318,23 @@ homemadeugarchforecast.recursive <- function(fitten, data, n.ahead, solver, sigm
     return(output.sigma)
   }
 }
-final.homemadeugarchforecast.recursive <- function(output.modelselect, data, n.ahead, solver){
+allrecursiveforecast <- function(output.modelselect, data, n.ahead, solver){
   all <- unlist(output.modelselect); all <- all[!duplicated(all)]
   output <- list()
   for(i in 1:length(all)){
-    output[[i]] <- homemadeugarchforecast.recursive(all[[i]], data, n.ahead, solver)
+    output[[i]] <- recursiveforecast(all[[i]], data, n.ahead, solver)
     print(i)
   }
   return(output)
 }
 
-forecastres.1 <- final.homemadeugarchforecast.recursive(ms, data=SP500_logreturns, n.ahead=1, solver="hybrid")
+forecastres.1 <- allrecursiveforecast(ms, data=SP500_logreturns, n.ahead=1, solver="hybrid")
+forecastres.3 <- allrecursiveforecast(ms, data=SP500_logreturns, n.ahead=3, solver="hybrid")
+forecastres.6 <- allrecursiveforecast(ms, data=SP500_logreturns, n.ahead=6, solver="hybrid")
+forecastres.12 <- allrecursiveforecast(ms, data=SP500_logreturns, n.ahead=12, solver="hybrid")
 
 #Testing procedure above using 'ugarchroll' from 'rugarch' package
-forecastreshomemade <- homemadeugarchforecast.recursive(ms[[3]][[1]][[1]], n.ahead=1, data=SP500_logreturns, 
+forecastreshomemade <- recursiveforecast(ms[[3]][[1]][[1]], n.ahead=1, data=SP500_logreturns, 
                                                         solver="hybrid", sigma.out=TRUE)
 getspec(ms[[3]][[1]][[1]])
 testspec <- ugarchspec(variance.model=list(model="sGARCH", garchOrder=c(2,2)),
