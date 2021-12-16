@@ -135,11 +135,11 @@ where $\sigma_{T+h}^{2}$ denotes a proxy for the true volatility. More on volati
 %Recall that the true volatility $\sigma_{T+h}^{2}$ is a latent variable, whence a proxy of $\sigma_{T+h}^{2}$ is needed. A discussion of different proxies
 Some common forecast evaluation statistics based on $N$ out-of-sample forecasts are as follows:
 \begin{equation*}
-    \mathrm{MSE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}e_{\iota,j+h\mid j},\quad\mathrm{MAE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}\abs{e_{\iota,j+h\mid j}},\quad\mathrm{MAPE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}\frac{\abs{e_{\iota,j+h\mid j}}}{\sigma_{j+h}}.
+    \mathrm{MSE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}e_{\iota,j+h\mid j}^{2},\quad\mathrm{MAE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}\abs{e_{\iota,j+h\mid j}},\quad\mathrm{MAPE}_{\iota}\coloneqq\frac{1}{N}\sum_{j=T+1}^{T+N}\frac{\abs{e_{\iota,j+h\mid j}}}{\sigma_{j+h}}.
 \end{equation*}
 \textcolor{red}{The model which produces the smallest values of the forecast evaluation statistics is judged to be the best model}. However, notice that these forecast evaluation statistics are random variables. So, in what follows, we introduce a statistical hypothesis testing procedure for determining if a model exhibits superior out-of-sample forecasting performance. This testing procedure, known as the so-called Diebold-Mariano (DM) test, is based on the following loss differential:
 \begin{equation*}
-    d_{T+h}\coloneqq g(e_{1,T+h}\mid T)-g(e_{2,T+h}\mid T),
+    d_{T+h}\coloneqq g(e_{1,T+h\mid T})-g(e_{2,T+h\mid T}),
 \end{equation*}
 where $g:\R\to\R$ is a loss function. Some common loss function choices are:
 \begin{equation*}
